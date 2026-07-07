@@ -85,7 +85,7 @@ export default {
     "GTA: San Andreas dizini seçilmemiş, ayarlara gidin ve oyun klasörü dizinini seçin.",
   admin_permissions_required_modal_title: "Yönetici izinleri gerekli!",
   admin_permissions_required_modal_description:
-    'Görünüşe göre GTA: San Andreas oyununuzun çalışması için yönetici izinleri gerekiyor. Bu, oyununuzun "C" sürücüsüne yüklenmiş olması gibi birçok nedenden kaynaklanıyor olabilir. Lütfen Kuyland Launcher'ı "Yönetici Olarak Çalıştır" seçeneğini kullanarak veya kendiniz manuel olarak yönetici olarak yeniden açın',
+    'Görünüşe göre GTA: San Andreas oyununuzun çalışması için yönetici izinleri gerekiyor. Bu, oyununuzun "C" sürücüsüne yüklenmiş olması gibi birçok nedenden kaynaklanıyor olabilir. Lütfen Kuyland Launcher uygulamasını "Yönetici Olarak Çalıştır" seçeneğini kullanarak veya kendiniz manuel olarak yönetici olarak yeniden açın',
   run_as_admin: "Yönetici Olarak Çalıştır",
   settings_general_tab_title: "Genel",
   settings_lang_tab_title: "Diller",
