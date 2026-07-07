@@ -12,7 +12,9 @@ export const getUpdateInfo = async (): Promise<
   ApiResponse<UpdateInfo | undefined>
 > => {
   try {
-    const response = await api.get<UpdateInfo>("/launcher", { timeout: 5000 });
+    const response = await api.get<UpdateInfo>("/launcher-update.json", {
+      timeout: 5000,
+    });
     return { success: true, data: response.data };
   } catch (error) {
     Log.debug("Failed to fetch update info:", error);

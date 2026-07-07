@@ -1,6 +1,6 @@
 // Cloudflare R2 public bucket serving manifest.json at its root.
 // See docs/manifest.template.json / docs/manifest.template.README.md for the upload format.
-export const MANIFEST_URL = "https://pub-96fc86a4b5f64a8da614a5067194014e.r2.dev/manifest.json";
+export const MANIFEST_URL = "https://cdn.kuylah.online/manifest.json";
 
 export interface ManifestPackage {
   name: string;

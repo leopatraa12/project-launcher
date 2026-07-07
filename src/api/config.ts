@@ -1,6 +1,11 @@
 import axios from "axios";
 
-const BASE_URL = "https://api.open.mp/";
+// TODO: replace with your own Cloudflare-hosted domain once ready.
+// Prefer a custom domain over a shared pub-*.r2.dev URL — some ISPs
+// (e.g. Indonesia's Trust+ Positif) blanket-block the shared r2.dev
+// platform domain at the DNS level, which would break this for players.
+// See docs/launcher-update.template.json / docs/launcher-update.template.README.md.
+const BASE_URL = "https://REPLACE_ME.example.com/";
 const REQUEST_TIMEOUT = 30000; // 30 seconds
 
 const api = axios.create({

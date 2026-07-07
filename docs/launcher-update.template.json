@@ -1,0 +1,14 @@
+{
+  "version": "7",
+  "download": "https://REPLACE_ME.example.com/kuyland-launcher-setup.exe",
+  "changelog": "https://REPLACE_ME.example.com/changelog",
+  "ompPluginChecksum": "REPLACE_WITH_OMP_CLIENT_DLL_MD5_HEX",
+  "ompPluginDownload": "https://assets.open.mp/omp-client.dll",
+  "versions": {
+    "7": {
+      "download": "https://REPLACE_ME.example.com/kuyland-launcher-setup.exe",
+      "ompPluginChecksum": "REPLACE_WITH_OMP_CLIENT_DLL_MD5_HEX",
+      "ompPluginDownload": "https://assets.open.mp/omp-client.dll"
+    }
+  }
+}
