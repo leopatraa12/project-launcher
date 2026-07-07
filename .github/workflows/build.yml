@@ -23,8 +23,9 @@ jobs:
           cache: 'yarn'
 
       - name: Setup Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@master
         with:
+          toolchain: nightly-2024-01-01
           targets: i686-pc-windows-msvc
 
       - name: Cache Rust
