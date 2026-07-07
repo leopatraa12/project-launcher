@@ -2,7 +2,7 @@ import { Server, ServerIdentifier } from "../utils/types";
 
 // TODO: swap these before release with the real Kuyland Remastered server address.
 export const KUYLAND_SERVER: ServerIdentifier = {
-  ip: "127.0.0.1",
+  ip: "51.79.184.109",
   port: 7777,
 };
 
