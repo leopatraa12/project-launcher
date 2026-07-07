@@ -1,4 +1,3 @@
-import { fs } from "@tauri-apps/api";
 import { t } from "i18next";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
@@ -149,30 +148,15 @@ const JoinServerPrompt = () => {
     [height, width, HEIGHT, WIDTH, theme, bigView, perServerNickname.length]
   );
 
+  // This launcher only ever targets one hardcoded server, which requires the
+  // launcher-managed SA-MP 0.3.7-R1 client (SAMPFUNCS compatibility) — so unlike
+  // a generic multi-server launcher, there's no need to guess a version from
+  // server rules, and we must not default to "custom" (trusting whatever
+  // samp.dll happens to already be in the GTA:SA folder), since that's what
+  // was causing "SAMPFUNCS requires SA-MP 0.3.7-R1" on launch.
   const setInitialSampVersion = useCallback(async () => {
-    if (await fs.exists(`${gtasaPath}/samp.dll`)) {
-      setPerServerVersion("custom");
-    } else if (
-      (server && server.version.includes("0.3.7")) ||
-      (server && server.rules["artwork"] == undefined)
-    ) {
-      setPerServerVersion("037R5_samp.dll");
-    } else if (
-      server &&
-      server.rules["artwork"] &&
-      server.rules["artwork"] === "Yes"
-    ) {
-      setPerServerVersion("03DL_samp.dll");
-    } else if (
-      server &&
-      server.rules["allowed_clients"] &&
-      server.rules["allowed_clients"].includes("0.3.DL")
-    ) {
-      setPerServerVersion("03DL_samp.dll");
-    } else {
-      setPerServerVersion("037R5_samp.dll");
-    }
-  }, [gtasaPath, server]);
+    setPerServerVersion("037R1_samp.dll");
+  }, []);
 
   const handleNicknameChange = useCallback(
     (text: string) => {

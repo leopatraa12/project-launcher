@@ -26,7 +26,12 @@ const useSettings = create<SettingsPersistentState>()(
       nickName: "",
       gtasaPath: "",
       customGameExe: "",
-      sampVersion: "custom",
+      // Default to the launcher-managed, checksum-verified 0.3.7-R1 client
+      // rather than "custom" (whatever samp.dll happens to already be in the
+      // GTA:SA folder) — Kuyland Remastered requires SAMPFUNCS-compatible
+      // SA-MP 0.3.7-R1, and trusting an arbitrary pre-existing samp.dll was
+      // causing "SAMPFUNCS requires SA-MP 0.3.7-R1" on PLAY.
+      sampVersion: "037R1_samp.dll",
       dataMerged: false,
       setNickName: (name) =>
         set(() => {
