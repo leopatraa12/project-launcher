@@ -1,57 +1,47 @@
-name: "Build"
+name: Build Tauri App
+
 on:
-  workflow_dispatch:
   push:
     branches:
-      - "master"
-  pull_request:
-    branches:
-      - "master"
+      - main
+  workflow_dispatch:
 
 jobs:
-  build-omp-launcher:
-    name: Windows build
+  build:
+    name: Build Windows
     runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
 
-      - name: Setup node
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'yarn'
 
-      - uses: actions-rust-lang/setup-rust-toolchain@v1
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: nightly-2024-01-01 # Specific nightly version that works with dll-syringe, remove when it gets fixed so we can use latest
+          targets: i686-pc-windows-msvc
 
-      - name: Install frontend dependencies
-        run: yarn install
+      - name: Cache Rust
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
 
-      - name: Install rust i686-pc-windows-msvc target
-        run: rustup target add i686-pc-windows-msvc
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
 
-      - name: Build project
+      - name: Build the app
         run: yarn release
-
-      - name: Generate artifact name
-        id: vars
-        shell: bash
-        run: |
-          artifact_name="open.mp-launcher-win-${GITHUB_RUN_ID}"
-          echo "artifact_name=${artifact_name}" >> $GITHUB_OUTPUT
-          setup_artifact_name="open.mp-launcher-win-setup-${GITHUB_RUN_ID}"
-          echo "setup_artifact_name=${setup_artifact_name}" >> $GITHUB_OUTPUT
-
-      - name: Upload build artifacts
+        
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.vars.outputs.artifact_name }}
-          path: src-tauri/target/i686-pc-windows-msvc/release/omp-launcher.exe
-          if-no-files-found: error
-
-      - name: Upload setup artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ steps.vars.outputs.setup_artifact_name }}
-          path: src-tauri/target/i686-pc-windows-msvc/release/bundle/nsis/omp-launcher_1.7.0_x86-setup.exe
+          name: omp-launcher-windows-setup
+          path: |
+            src-tauri/target/i686-pc-windows-msvc/release/bundle/nsis/*.exe
+            src-tauri/target/i686-pc-windows-msvc/release/bundle/msi/*.msi
           if-no-files-found: error
