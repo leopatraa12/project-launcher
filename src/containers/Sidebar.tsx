@@ -3,8 +3,10 @@ import { t } from "i18next";
 import { memo, useCallback, useMemo } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import Icon from "../components/Icon";
-import { EXTERNAL_LINKS } from "../constants/links";
+import Text from "../components/Text";
 import { images } from "../constants/images";
+import { EXTERNAL_LINKS } from "../constants/links";
+import { SERVER_NAME, SERVER_TAGLINE } from "../constants/server";
 import { DashboardSection, useDashboardNav } from "../states/dashboardNav";
 import { useSettingsModal } from "../states/settingsModal";
 import { useTheme } from "../states/theme";
@@ -12,69 +14,103 @@ import { sc } from "../utils/sizeScaler";
 
 interface NavItem {
   icon: string;
-  title: string;
-  section: DashboardSection;
+  titleKey: string;
+  section: DashboardSection | "settings";
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { icon: images.icons.home, title: "nav_home", section: "home" },
-  { icon: images.icons.server, title: "nav_server", section: "server" },
-  { icon: images.icons.store, title: "nav_store", section: "store" },
-  { icon: images.icons.community, title: "nav_community", section: "community" },
+  { icon: images.icons.home, titleKey: "nav_home", section: "home" },
+  { icon: images.icons.server, titleKey: "nav_server", section: "server" },
+  { icon: images.icons.store, titleKey: "nav_store", section: "store" },
+  { icon: images.icons.community, titleKey: "nav_community", section: "community" },
+  { icon: images.icons.settings, titleKey: "settings", section: "settings" },
 ];
+
+// Brand name/logo assets aren't ready yet — render the two-tone wordmark from
+// the SERVER_NAME constant (last word in primary color) as a placeholder;
+// swap for a real logo image once one exists.
+const splitBrandName = (name: string) => {
+  const words = name.trim().split(" ");
+  const accent = words.pop() ?? "";
+  return { lead: words.join(" "), accent };
+};
 
 const Sidebar = memo(() => {
   const { theme } = useTheme();
   const { scrollToSection } = useDashboardNav();
   const { show: showSettings } = useSettingsModal();
 
-  const handleNavPress = useCallback(
-    (section: DashboardSection) => scrollToSection(section),
-    [scrollToSection]
-  );
+  const brand = useMemo(() => splitBrandName(SERVER_NAME), []);
 
-  const dynamicStyles = useMemo(
-    () => ({
-      container: [styles.container, { backgroundColor: theme.itemBackgroundColor }],
-      navButton: [styles.navButton, { backgroundColor: theme.secondary }],
-    }),
-    [theme]
+  const handleNavPress = useCallback(
+    (item: NavItem) => {
+      if (item.section === "settings") {
+        showSettings();
+      } else {
+        scrollToSection(item.section);
+      }
+    },
+    [scrollToSection, showSettings]
   );
 
   return (
-    <View style={dynamicStyles.container}>
-      <View style={styles.topSection}>
-        {NAV_ITEMS.map((item) => (
-          <TouchableOpacity
-            key={item.section}
-            style={dynamicStyles.navButton}
-            onPress={() => handleNavPress(item.section)}
+    <View style={[styles.container, { backgroundColor: theme.itemBackgroundColor }]}>
+      <View>
+        <View style={styles.brandBlock}>
+          <Text semibold size={3} color={theme.textPrimary}>
+            {brand.lead}
+          </Text>
+          <Text semibold size={3} color={theme.primary}>
+            {brand.accent}
+          </Text>
+          <Text
+            size={1}
+            color={theme.textSecondary}
+            numberOfLines={2}
+            style={styles.tagline}
           >
-            <Icon
-              svg
-              title={t(item.title)}
-              image={item.icon}
-              size={sc(20)}
-              color={theme.textPrimary}
-            />
-          </TouchableOpacity>
-        ))}
-        <TouchableOpacity style={dynamicStyles.navButton} onPress={showSettings}>
-          <Icon
-            svg
-            title={t("settings")}
-            image={images.icons.settings}
-            size={sc(20)}
-            color={theme.textPrimary}
-          />
-        </TouchableOpacity>
+            {SERVER_TAGLINE}
+          </Text>
+        </View>
+
+        <View style={styles.navList}>
+          {NAV_ITEMS.map((item, index) => {
+            // "home" is the default landing scroll target; treated as active at rest.
+            const isActive = index === 0;
+            return (
+              <TouchableOpacity
+                key={item.section}
+                style={[
+                  styles.navItem,
+                  isActive && { backgroundColor: `${theme.primary}26` },
+                ]}
+                onPress={() => handleNavPress(item)}
+              >
+                <Icon
+                  svg
+                  image={item.icon}
+                  size={sc(18)}
+                  color={isActive ? theme.primary : theme.textSecondary}
+                />
+                <Text
+                  semibold
+                  size={2}
+                  color={isActive ? theme.primary : theme.textPrimary}
+                  style={styles.navItemLabel}
+                >
+                  {t(item.titleKey)}
+                </Text>
+                {isActive && (
+                  <View style={[styles.activeDot, { backgroundColor: theme.primary }]} />
+                )}
+              </TouchableOpacity>
+            );
+          })}
+        </View>
       </View>
 
-      <View style={styles.footerSection}>
-        <TouchableOpacity
-          style={dynamicStyles.navButton}
-          onPress={() => shell.open(EXTERNAL_LINKS.discord)}
-        >
+      <View style={[styles.footerSection, { borderTopColor: theme.textInputBackgroundColor }]}>
+        <TouchableOpacity onPress={() => shell.open(EXTERNAL_LINKS.discord)}>
           <Icon
             svg
             title={t("footer_discord")}
@@ -83,10 +119,7 @@ const Sidebar = memo(() => {
             color={theme.textSecondary}
           />
         </TouchableOpacity>
-        <TouchableOpacity
-          style={dynamicStyles.navButton}
-          onPress={() => shell.open(EXTERNAL_LINKS.website)}
-        >
+        <TouchableOpacity onPress={() => shell.open(EXTERNAL_LINKS.website)}>
           <Icon
             svg
             title={t("footer_website")}
@@ -95,10 +128,7 @@ const Sidebar = memo(() => {
             color={theme.textSecondary}
           />
         </TouchableOpacity>
-        <TouchableOpacity
-          style={dynamicStyles.navButton}
-          onPress={() => shell.open(EXTERNAL_LINKS.instagram)}
-        >
+        <TouchableOpacity onPress={() => shell.open(EXTERNAL_LINKS.instagram)}>
           <Icon
             svg
             title={t("footer_instagram")}
@@ -114,26 +144,45 @@ const Sidebar = memo(() => {
 
 const styles = StyleSheet.create({
   container: {
-    width: sc(64),
+    width: sc(210),
     height: "100%",
     borderRadius: sc(10),
-    paddingVertical: sc(15),
+    padding: sc(15),
     justifyContent: "space-between",
-    alignItems: "center",
   },
-  topSection: {
+  brandBlock: {
+    marginBottom: sc(24),
+  },
+  tagline: {
+    marginTop: sc(4),
+    textTransform: "uppercase",
+  },
+  navList: {
+    width: "100%",
+  },
+  navItem: {
+    flexDirection: "row",
     alignItems: "center",
+    height: sc(42),
+    paddingHorizontal: sc(12),
+    borderRadius: sc(8),
+    marginBottom: sc(6),
+  },
+  navItemLabel: {
+    marginLeft: sc(12),
+    flex: 1,
+  },
+  activeDot: {
+    width: sc(6),
+    height: sc(6),
+    borderRadius: sc(3),
   },
   footerSection: {
-    alignItems: "center",
-  },
-  navButton: {
-    height: sc(38),
-    width: sc(38),
-    borderRadius: sc(8),
+    flexDirection: "row",
     justifyContent: "center",
-    alignItems: "center",
-    marginBottom: sc(10),
+    paddingTop: sc(15),
+    borderTopWidth: 1,
+    gap: sc(20),
   },
 });
 

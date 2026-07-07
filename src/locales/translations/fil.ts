@@ -87,7 +87,7 @@ export default {
     "Hindi mo inilagay ang lokasyon ng GTA: San Andreas, pumunta sa settings at hanapin ang game folder.",
   admin_permissions_required_modal_title: "Kailangan ng admin permissions!",
   admin_permissions_required_modal_description:
-    'Mukhang kailangan ng iyong GTA: San Andreas ng administration permissions para gumana. Maaaring dahil ito sa maraming dahilan, tulad ng pagkakainstall ng laro sa "C" drive. Paki-bukas ulit ang open.mp launcher bilang administrator gamit ang "Run as Admin" button o gawin ito nang manu-mano.',
+    'Mukhang kailangan ng iyong GTA: San Andreas ng administration permissions para gumana. Maaaring dahil ito sa maraming dahilan, tulad ng pagkakainstall ng laro sa "C" drive. Paki-bukas ulit ang Kuyland Launcher bilang administrator gamit ang "Run as Admin" button o gawin ito nang manu-mano.',
   run_as_admin: "Patakbuhin bilang Admin",
   settings_general_tab_title: "Pangkalahatan",
   settings_lang_tab_title: "Wika",

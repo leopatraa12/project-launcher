@@ -85,7 +85,7 @@ export default {
     "Nenastavili jste cestu k GTA: San Andreas, jděte do nastavení a vyhledejte složku se hrou.",
   admin_permissions_required_modal_title: "Vyžadováno spuštění jako správce!",
   admin_permissions_required_modal_description:
-    'Zdá se, že hra GTA: San Andreas vyžaduje spuštění jako správce. To může být způsobeno několika příčinami, jako například instalací na disku "C". Prosím otevřete znovu open.mp launcher buď kliknutím na tlačítko "Spustit jako správce", nebo nastavte spuštění jako správce sami ručně',
+    'Zdá se, že hra GTA: San Andreas vyžaduje spuštění jako správce. To může být způsobeno několika příčinami, jako například instalací na disku "C". Prosím otevřete znovu Kuyland Launcher buď kliknutím na tlačítko "Spustit jako správce", nebo nastavte spuštění jako správce sami ručně',
   run_as_admin: "Spustit jako správce",
   settings_general_tab_title: "Obecné",
   settings_lang_tab_title: "Jazyky",

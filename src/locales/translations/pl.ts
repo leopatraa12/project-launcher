@@ -77,7 +77,7 @@ export default {
   admin_permissions_required_modal_title:
     "Wymagane są uprawnienia administratora!",
   admin_permissions_required_modal_description:
-    'Wygląda na to, że gra GTA: San Andreas wymaga uprawnień administratora do uruchomienia. Może to być spowodowane różnymi przyczynami, np. zainstalowaniem gry na dysku "C". Otwórz ponownie launcher open.mp jako administrator, używając przycisku "Uruchom jako Administrator" lub wykonaj to ręcznie przez siebie.',
+    'Wygląda na to, że gra GTA: San Andreas wymaga uprawnień administratora do uruchomienia. Może to być spowodowane różnymi przyczynami, np. zainstalowaniem gry na dysku "C". Otwórz ponownie Kuyland Launcher jako administrator, używając przycisku "Uruchom jako Administrator" lub wykonaj to ręcznie przez siebie.',
   run_as_admin: "Uruchom jako Administrator",
   open_settings: "Ustawienia",
   cancel: "Anuluj",

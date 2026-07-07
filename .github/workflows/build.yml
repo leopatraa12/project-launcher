@@ -42,7 +42,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: omp-launcher-windows-setup
+          name: kuyland-launcher-windows-setup
           path: |
             src-tauri/target/i686-pc-windows-msvc/release/bundle/nsis/*.exe
             src-tauri/target/i686-pc-windows-msvc/release/bundle/msi/*.msi

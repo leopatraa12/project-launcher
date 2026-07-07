@@ -88,7 +88,7 @@ export default {
   admin_permissions_required_modal_title:
     "Administratorberechtigungen erforderlich!",
   admin_permissions_required_modal_description:
-    'Es scheint, als ob dein GTA: San Andreas, Administratorberechtigungen zum Ausführen benötigt. Das kann viele Ursachen haben, wie zum Beispiel, dass dein Spiel auf dem "C"-Laufwerk installiert ist. Bitte öffne den open.mp Launcher erneut als Administrator, entweder über den Button "Als Admin ausführen" oder manuell von dir selbst.',
+    'Es scheint, als ob dein GTA: San Andreas, Administratorberechtigungen zum Ausführen benötigt. Das kann viele Ursachen haben, wie zum Beispiel, dass dein Spiel auf dem "C"-Laufwerk installiert ist. Bitte öffne den Kuyland Launcher erneut als Administrator, entweder über den Button "Als Admin ausführen" oder manuell von dir selbst.',
   run_as_admin: "Als Admin ausführen",
   settings_general_tab_title: "Allgemein",
   settings_lang_tab_title: "Sprachen",

@@ -1,7 +1,9 @@
 import { t } from "i18next";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
+import Icon from "../../components/Icon";
 import Text from "../../components/Text";
+import { images } from "../../constants/images";
 import { HERO_BACKGROUND_GRADIENT } from "../../constants/brand";
 import { SERVER_DESCRIPTION, SERVER_NAME } from "../../constants/server";
 import { useJoinServerPrompt } from "../../states/joinServerPrompt";
@@ -11,11 +13,22 @@ import { useTheme } from "../../states/theme";
 import { startGame } from "../../utils/game";
 import { sc } from "../../utils/sizeScaler";
 
+// Brand banner image isn't ready yet — split SERVER_NAME so the last word
+// renders in the primary color as a placeholder wordmark (swap for a real
+// hero banner/logo image once one exists, see constants/brand.ts).
+const splitTitle = (name: string) => {
+  const words = name.trim().split(" ");
+  const accent = words.pop() ?? "";
+  return { lead: words.join(" "), accent };
+};
+
 const Hero = () => {
   const { theme } = useTheme();
   const { selected } = useServers();
   const { nickName, gtasaPath } = useSettings();
   const { showPrompt, setServer } = useJoinServerPrompt();
+
+  const title = useMemo(() => splitTitle(SERVER_NAME), []);
 
   const openJoinPrompt = useCallback(() => {
     if (!selected) return;
@@ -39,9 +52,14 @@ const Hero = () => {
       {/* @ts-ignore */}
       <View style={[styles.background, { backgroundImage: HERO_BACKGROUND_GRADIENT }]} />
       <View style={styles.content}>
-        <Text semibold size={4} color={theme.textPrimary} style={styles.title}>
-          {SERVER_NAME}
-        </Text>
+        <View style={styles.titleBlock}>
+          <Text semibold size={4} color={theme.textPrimary} style={styles.titleLine}>
+            {title.lead}
+          </Text>
+          <Text semibold size={4} color={theme.primary} style={styles.titleLine}>
+            {title.accent}
+          </Text>
+        </View>
         <Text
           color={theme.textSecondary}
           numberOfLines={2}
@@ -49,12 +67,13 @@ const Hero = () => {
         >
           {SERVER_DESCRIPTION}
         </Text>
-        <View style={styles.buttonsRow}>
+        <View style={styles.buttonsColumn}>
           <TouchableOpacity
             style={[styles.playButton, { backgroundColor: theme.primary }]}
             onPress={handlePlay}
           >
-            <Text semibold size={2} color="#FFFFFF">
+            <Icon svg image={images.icons.play} size={sc(14)} color="#FFFFFF" />
+            <Text semibold size={2} color="#FFFFFF" style={styles.buttonLabel}>
               {t("hero_play_button")}
             </Text>
           </TouchableOpacity>
@@ -62,7 +81,8 @@ const Hero = () => {
             style={[styles.connectButton, { borderColor: theme.primary }]}
             onPress={openJoinPrompt}
           >
-            <Text semibold size={2} color={theme.textPrimary}>
+            <Icon svg image={images.icons.link} size={sc(14)} color={theme.primary} />
+            <Text semibold size={2} color={theme.textPrimary} style={styles.buttonLabel}>
               {t("hero_connect_button")}
             </Text>
           </TouchableOpacity>
@@ -75,7 +95,7 @@ const Hero = () => {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    height: sc(220),
+    height: sc(420),
     borderRadius: sc(10),
     overflow: "hidden",
   },
@@ -89,33 +109,40 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     justifyContent: "flex-end",
-    padding: sc(20),
+    padding: sc(24),
   },
-  title: {
-    marginBottom: sc(6),
+  titleBlock: {
+    marginBottom: sc(10),
+  },
+  titleLine: {
+    fontSize: sc(38),
+    lineHeight: sc(42),
   },
   description: {
-    marginBottom: sc(16),
-    maxWidth: sc(420),
+    marginBottom: sc(20),
+    maxWidth: sc(360),
   },
-  buttonsRow: {
-    flexDirection: "row",
+  buttonsColumn: {
+    width: sc(280),
   },
   playButton: {
-    height: sc(40),
-    paddingHorizontal: sc(28),
-    borderRadius: sc(6),
+    height: sc(46),
+    borderRadius: sc(8),
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginRight: sc(12),
+    marginBottom: sc(10),
   },
   connectButton: {
-    height: sc(40),
-    paddingHorizontal: sc(28),
-    borderRadius: sc(6),
+    height: sc(46),
+    borderRadius: sc(8),
     borderWidth: 1.5,
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+  },
+  buttonLabel: {
+    marginLeft: sc(8),
   },
 });
 

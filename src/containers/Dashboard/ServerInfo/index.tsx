@@ -1,34 +1,46 @@
+import { shell } from "@tauri-apps/api";
 import { t } from "i18next";
 import { useMemo, useState } from "react";
-import { shell } from "@tauri-apps/api";
-import { Image, Pressable, StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import Icon from "../../../components/Icon";
 import Text from "../../../components/Text";
 import { images } from "../../../constants/images";
-import { PING_TIMEOUT_VALUE } from "../../../utils/query";
 import { useServers } from "../../../states/servers";
 import { useTheme } from "../../../states/theme";
+import { PING_TIMEOUT_VALUE } from "../../../utils/query";
 import { sc } from "../../../utils/sizeScaler";
 import { validateWebUrl } from "../../../utils/validation";
 import AdditionalInfo from "./AdditionalInfo";
 import BottomBar from "./BottomBar";
 import PlayerList from "./PlayerList";
 
-interface StatTileProps {
+interface InfoRowProps {
+  icon: string;
   label: string;
   value: string;
+  valueColor?: string;
+  isLast?: boolean;
 }
 
-const StatTile = ({ label, value }: StatTileProps) => {
+const InfoRow = ({ icon, label, value, valueColor, isLast }: InfoRowProps) => {
   const { theme } = useTheme();
   return (
     <View
-      style={[styles.statTile, { backgroundColor: theme.itemBackgroundColor }]}
+      style={[
+        styles.infoRow,
+        !isLast && {
+          borderBottomWidth: 1,
+          borderBottomColor: theme.textInputBackgroundColor,
+        },
+      ]}
     >
-      <Text size={1} color={theme.textSecondary}>
-        {label}
-      </Text>
-      <Text semibold size={3} color={theme.textPrimary}>
+      <View style={styles.infoRowLeft}>
+        <Icon svg image={icon} size={sc(15)} color={theme.textSecondary} />
+        <Text size={2} color={theme.textSecondary} style={styles.infoRowLabel}>
+          {label}
+        </Text>
+      </View>
+      <Text semibold size={2} color={valueColor ?? theme.textPrimary}>
         {value}
       </Text>
     </View>
@@ -36,7 +48,7 @@ const StatTile = ({ label, value }: StatTileProps) => {
 };
 
 const ServerInfo = () => {
-  const { theme, themeType } = useTheme();
+  const { theme } = useTheme();
   const { selected } = useServers();
   const [showLiveDetails, setShowLiveDetails] = useState(false);
 
@@ -48,36 +60,24 @@ const ServerInfo = () => {
   const statusLabel = isOnline ? t("status_online") : t("status_offline");
 
   const webUrl = useMemo(() => {
-    if (selected) {
-      if (validateWebUrl(selected.rules.weburl)) {
-        return selected.rules.weburl;
-      }
+    if (selected && validateWebUrl(selected.rules.weburl)) {
+      return selected.rules.weburl;
     }
     return "";
   }, [selected]);
 
-  const bannerUrl = useMemo(() => {
-    if (!selected?.omp) return "";
-
-    const { bannerDark, bannerLight } = selected.omp;
-    const preferredBanner = themeType === "dark" ? bannerDark : bannerLight;
-    const fallbackBanner = themeType === "dark" ? bannerLight : bannerDark;
-
-    return preferredBanner || fallbackBanner || "";
-  }, [selected?.omp?.bannerDark, selected?.omp?.bannerLight, themeType]);
-
   if (!selected) {
     return (
-      <View style={[styles.container, { backgroundColor: theme.secondary }]}>
+      <View style={[styles.container, { backgroundColor: theme.itemBackgroundColor }]}>
         <Text color={theme.textSecondary}>{t("server_info_title")}...</Text>
       </View>
     );
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.secondary }]}>
+    <View style={[styles.container, { backgroundColor: theme.itemBackgroundColor }]}>
       <View style={styles.headerRow}>
-        <Text semibold size={4} color={theme.textPrimary}>
+        <Text semibold size={2} color={theme.textPrimary} style={styles.headerTitle}>
           {t("server_info_title")}
         </Text>
         <View style={styles.statusPill}>
@@ -88,82 +88,62 @@ const ServerInfo = () => {
         </View>
       </View>
 
-      <View style={styles.statTilesRow}>
-        <StatTile
+      <View style={styles.rowsList}>
+        <InfoRow
+          icon={images.icons.users}
           label={t("server_info_players_online")}
-          value={`${selected.playerCount}`}
+          value={`${selected.playerCount} / ${selected.maxPlayers}`}
         />
-        <StatTile
-          label={t("server_info_max_players")}
-          value={`${selected.maxPlayers}`}
-        />
-        <StatTile
+        <InfoRow
+          icon={images.icons.signal}
           label={t("server_info_ping")}
-          value={isOnline ? `${selected.ping} ms` : "-"}
+          value={isOnline ? `${selected.ping}ms` : "-"}
         />
-        <StatTile label={t("server_info_version")} value={selected.version} />
-        <StatTile
+        <InfoRow
+          icon={images.icons.versionTag}
+          label={t("server_info_version")}
+          value={selected.version}
+        />
+        <InfoRow
+          icon={images.icons.mic}
           label={t("server_info_voice_status")}
           value={t("server_info_voice_status_unavailable")}
+          valueColor={theme.textSecondary}
+          isLast
         />
-      </View>
-
-      <BottomBar />
-
-      <View
-        style={[
-          styles.bannerContainer,
-          { height: bannerUrl.length ? sc(90) : sc(35) },
-        ]}
-      >
-        <div title={webUrl} style={{ width: "100%", height: "100%" }}>
-          <Pressable
-            disabled={webUrl.length < 1}
-            style={styles.bannerPressable}
-            onPress={() =>
-              shell.open(webUrl.includes("http") ? webUrl : "https://" + webUrl)
-            }
-          >
-            {bannerUrl.length ? (
-              <Image
-                source={{ uri: bannerUrl }}
-                style={styles.bannerImage}
-                resizeMode="cover"
-              />
-            ) : webUrl.length ? (
-              <>
-                <Icon svg image={images.icons.link} size={sc(29)} />
-                <Text
-                  semibold
-                  size={1}
-                  color={theme.textPrimary}
-                  style={{ marginLeft: sc(5) }}
-                >
-                  {webUrl}
-                </Text>
-              </>
-            ) : null}
-          </Pressable>
-        </div>
       </View>
 
       <TouchableOpacity
         style={styles.liveDetailsToggle}
         onPress={() => setShowLiveDetails((prev) => !prev)}
       >
-        <Text semibold size={2} color={theme.primary}>
-          {t("server_info_live_details_toggle")}{" "}
-          {showLiveDetails ? "▲" : "▼"}
+        <Text semibold size={1} color={theme.primary}>
+          {t("server_info_live_details_toggle")} {showLiveDetails ? "▲" : "▼"}
         </Text>
       </TouchableOpacity>
 
       {showLiveDetails && (
-        <View style={styles.liveDetailsRow}>
-          <View style={styles.liveDetailsColumn}>
-            <PlayerList players={selected.players} />
-          </View>
-          <View style={styles.liveDetailsColumn}>
-            <AdditionalInfo server={selected} />
+        <View style={styles.liveDetails}>
+          <BottomBar />
+          {webUrl.length > 0 && (
+            <Text
+              size={1}
+              color={theme.primary}
+              style={styles.webUrl}
+              onPress={() =>
+                shell.open(webUrl.includes("http") ? webUrl : "https://" + webUrl)
+              }
+            >
+              {webUrl}
+            </Text>
+          )}
+          <View style={styles.liveDetailsRow}>
+            <View style={styles.liveDetailsColumn}>
+              <PlayerList players={selected.players} />
+            </View>
+            <View style={styles.liveDetailsColumn}>
+              <AdditionalInfo server={selected} />
+            </View>
           </View>
         </View>
       )}
@@ -174,6 +154,7 @@ const ServerInfo = () => {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
+    flex: 1,
     borderRadius: sc(10),
     padding: sc(15),
   },
@@ -182,6 +163,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: sc(12),
+  },
+  headerTitle: {
+    textTransform: "uppercase",
   },
   statusPill: {
     flexDirection: "row",
@@ -193,47 +177,35 @@ const styles = StyleSheet.create({
     borderRadius: sc(4),
     marginRight: sc(6),
   },
-  statTilesRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    marginBottom: sc(12),
-  },
-  statTile: {
-    flexGrow: 1,
-    minWidth: sc(100),
-    marginRight: sc(8),
-    marginBottom: sc(8),
-    borderRadius: sc(8),
-    padding: sc(10),
-  },
-  bannerContainer: {
+  rowsList: {
     width: "100%",
-    marginTop: sc(8),
-    marginBottom: sc(8),
-    borderRadius: sc(5),
-    overflow: "hidden",
   },
-  bannerPressable: {
+  infoRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    width: "100%",
-    height: "100%",
-    flexDirection: "row",
-    paddingLeft: sc(12),
+    paddingVertical: sc(10),
   },
-  bannerImage: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    height: "100%",
-    width: "100%",
+  infoRowLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  infoRowLabel: {
+    marginLeft: sc(8),
   },
   liveDetailsToggle: {
-    marginTop: sc(4),
-    marginBottom: sc(8),
+    marginTop: sc(12),
+  },
+  liveDetails: {
+    marginTop: sc(10),
+  },
+  webUrl: {
+    marginTop: sc(8),
   },
   liveDetailsRow: {
     flexDirection: "row",
-    height: sc(300),
+    height: sc(260),
+    marginTop: sc(10),
   },
   liveDetailsColumn: {
     flex: 1,

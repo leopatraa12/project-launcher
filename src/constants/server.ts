@@ -7,6 +7,7 @@ export const KUYLAND_SERVER: ServerIdentifier = {
 };
 
 export const SERVER_NAME = "Kuyland Remastered";
+export const SERVER_TAGLINE = "Dedicated Roleplay Launcher";
 export const SERVER_DESCRIPTION =
   "The official Kuyland Remastered experience — jump in and play.";
 

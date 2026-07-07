@@ -87,7 +87,7 @@ export default {
     "Je hebt het GTA: San Andreas-pad niet ingesteld. Ga naar instellingen en zoek de spelmap.",
   admin_permissions_required_modal_title: "Beheerdersrechten vereist!",
   admin_permissions_required_modal_description:
-    'Het lijkt erop dat je GTA: San Andreas beheerdersrechten nodig heeft om te starten. Dit kan meerdere oorzaken hebben, zoals installatie op schijf "C". Start de open.mp-launcher opnieuw als administrator via de knop "Als admin uitvoeren".',
+    'Het lijkt erop dat je GTA: San Andreas beheerdersrechten nodig heeft om te starten. Dit kan meerdere oorzaken hebben, zoals installatie op schijf "C". Start de Kuyland Launcher opnieuw als administrator via de knop "Als admin uitvoeren".',
   run_as_admin: "Als admin uitvoeren",
   settings_general_tab_title: "Algemeen",
   settings_lang_tab_title: "Talen",

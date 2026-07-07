@@ -1,54 +1,70 @@
 import { shell } from "@tauri-apps/api";
 import { t } from "i18next";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
+import Icon from "../../components/Icon";
 import Text from "../../components/Text";
 import { EXTERNAL_LINKS } from "../../constants/links";
+import { images } from "../../constants/images";
 import {
   FEATURED_STORE_ITEMS,
-  FeaturedStoreType,
+  FeaturedStoreItem,
 } from "../../constants/dummyContent";
 import { useTheme } from "../../states/theme";
 import { sc } from "../../utils/sizeScaler";
 
-// Phase 3: replace FEATURED_STORE_ITEMS with real store data (see docs/prd.md §8.7).
-const TYPE_LABEL_KEYS: Record<FeaturedStoreType, string> = {
-  vip: "store_type_vip",
-  vehicle: "store_type_vehicle",
-  bundle: "store_type_bundle",
-  coin: "store_type_coin",
+const ICON_MAP: Record<FeaturedStoreItem["icon"], string> = {
+  crown: images.icons.crown,
+  car: images.icons.car,
+  users: images.icons.users,
+  coin: images.icons.coin,
 };
 
+const VIP_ACCENT_COLOR = "#F5B942";
+
+// Phase 3: replace FEATURED_STORE_ITEMS with real store data (see docs/prd.md §8.7).
 const FeaturedStore = () => {
   const { theme } = useTheme();
 
   return (
-    <View style={styles.container}>
-      <Text semibold size={4} color={theme.textPrimary} style={styles.title}>
+    <View style={[styles.container, { backgroundColor: theme.itemBackgroundColor }]}>
+      <Text semibold size={2} color={theme.textPrimary} style={styles.title}>
         {t("featured_store_title")}
       </Text>
       <View style={styles.grid}>
-        {FEATURED_STORE_ITEMS.map((item) => (
-          <TouchableOpacity
-            key={item.id}
-            style={[styles.tile, { backgroundColor: theme.itemBackgroundColor }]}
-            onPress={() => shell.open(EXTERNAL_LINKS.store)}
-          >
-            <Text semibold size={1} color={theme.primary} style={styles.badge}>
-              {t(TYPE_LABEL_KEYS[item.type])}
-            </Text>
-            <Text semibold size={2} color={theme.textPrimary}>
-              {item.title}
-            </Text>
-            <Text
-              size={1}
-              color={theme.textSecondary}
-              numberOfLines={2}
-              style={styles.description}
+        {FEATURED_STORE_ITEMS.map((item) => {
+          const isVip = item.type === "vip";
+          return (
+            <TouchableOpacity
+              key={item.id}
+              style={[
+                styles.tile,
+                {
+                  backgroundColor: isVip
+                    ? `${VIP_ACCENT_COLOR}1F`
+                    : theme.textInputBackgroundColor,
+                  borderColor: isVip ? VIP_ACCENT_COLOR : "transparent",
+                },
+              ]}
+              onPress={() => shell.open(EXTERNAL_LINKS.store)}
             >
-              {item.description}
-            </Text>
-          </TouchableOpacity>
-        ))}
+              <Icon
+                svg
+                image={ICON_MAP[item.icon]}
+                size={sc(22)}
+                color={isVip ? VIP_ACCENT_COLOR : theme.primary}
+              />
+              <Text
+                semibold
+                size={1}
+                color={theme.textPrimary}
+                numberOfLines={2}
+                style={styles.tileTitle}
+              >
+                {item.title}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
       </View>
     </View>
   );
@@ -57,26 +73,32 @@ const FeaturedStore = () => {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
+    height: "100%",
+    borderRadius: sc(10),
+    padding: sc(15),
   },
   title: {
     marginBottom: sc(12),
+    textTransform: "uppercase",
   },
   grid: {
     flexDirection: "row",
     flexWrap: "wrap",
+    gap: sc(10),
   },
   tile: {
-    width: sc(180),
+    flexBasis: "47%",
+    flexGrow: 1,
+    height: sc(96),
     borderRadius: sc(8),
-    padding: sc(12),
-    marginRight: sc(10),
-    marginBottom: sc(10),
+    borderWidth: 1.5,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: sc(8),
   },
-  badge: {
-    marginBottom: sc(4),
-  },
-  description: {
-    marginTop: sc(4),
+  tileTitle: {
+    marginTop: sc(8),
+    textAlign: "center",
   },
 });
 

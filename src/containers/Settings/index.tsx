@@ -12,6 +12,7 @@ import StaticModal from "../../components/StaticModal";
 import TabBar from "../../components/TabBar";
 import Text from "../../components/Text";
 import { images } from "../../constants/images";
+import { EXTERNAL_LINKS } from "../../constants/links";
 import { useAppState } from "../../states/app";
 import { useGenericPersistentState } from "../../states/genericStates";
 import { useSettingsModal } from "../../states/settingsModal";
@@ -62,12 +63,8 @@ const SettingsModal = () => {
     hide();
   }, [hide]);
 
-  const handleOpenMpPress = useCallback(() => {
-    shell.open("https://open.mp/");
-  }, []);
-
-  const handleGithubPress = useCallback(() => {
-    shell.open("https://github.com/openmultiplayer/launcher/");
+  const handleBrandPress = useCallback(() => {
+    shell.open(EXTERNAL_LINKS.website);
   }, []);
 
   if (!visible) {
@@ -98,12 +95,8 @@ const SettingsModal = () => {
         <View style={styles.appInfoContainer}>
           <Text size={2} color={theme.textPrimary}>
             {t("settings_credits_made_by")}{" "}
-            <Text size={2} onPress={handleOpenMpPress} color={theme.primary}>
-              open.mp
-            </Text>{" "}
-            |{" "}
-            <Text size={2} onPress={handleGithubPress} color={theme.primary}>
-              {t("settings_credits_view_source_on_github")}
+            <Text size={2} onPress={handleBrandPress} color={theme.primary}>
+              Kuyland
             </Text>{" "}
             | v{nativeAppVersion} (Build {version})
           </Text>

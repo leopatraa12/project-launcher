@@ -87,7 +87,7 @@ export default {
   admin_permissions_required_modal_title:
     "Reikalingos administratoriaus teisės!",
   admin_permissions_required_modal_description:
-    "Atrodo, kad jūsų GTA: San Andreas žaidimui reikalingos administravimo teisės. Taip gali būti dėl daugelio priežasčių, pvz., žaidimo įdiegimo „C“ diske. Iš naujo atidarykite open.mp kaip administratorius naudodami mygtuką „Paleisti kaip administratoriui“ arba nustatykite patys rankiniu būdu",
+    "Atrodo, kad jūsų GTA: San Andreas žaidimui reikalingos administravimo teisės. Taip gali būti dėl daugelio priežasčių, pvz., žaidimo įdiegimo „C“ diske. Iš naujo atidarykite Kuyland Launcher kaip administratorius naudodami mygtuką „Paleisti kaip administratoriui“ arba nustatykite patys rankiniu būdu",
   run_as_admin: "Paleisti kaip administratoriui",
   settings_general_tab_title: "Pagrindiniai",
   settings_lang_tab_title: "Kalbos",

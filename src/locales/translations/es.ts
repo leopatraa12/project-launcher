@@ -87,7 +87,7 @@ export default {
     "No has definido la ruta de GTA: San Andreas, ve a configuración y busca la carpeta del juego.",
   admin_permissions_required_modal_title: "¡Se requieren permisos de administrador!",
   admin_permissions_required_modal_description:
-    'Parece que tu juego GTA: San Andreas requiere permisos de administrador para ejecutarse. Esto puede deberse a varios motivos, como tener el juego instalado en la unidad "C". Vuelve a abrir el launcher de open.mp como administrador usando el botón "Ejecutar como administrador" o hazlo manualmente.',
+    'Parece que tu juego GTA: San Andreas requiere permisos de administrador para ejecutarse. Esto puede deberse a varios motivos, como tener el juego instalado en la unidad "C". Vuelve a abrir el Kuyland Launcher como administrador usando el botón "Ejecutar como administrador" o hazlo manualmente.',
   run_as_admin: "Ejecutar como administrador",
   settings_general_tab_title: "General",
   settings_lang_tab_title: "Idiomas",

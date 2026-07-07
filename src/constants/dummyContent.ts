@@ -1,6 +1,6 @@
-// Phase 3: replace these static arrays with real backend-sourced content
-// (see docs/prd.md §8.6, §8.7). For this pass they only exist to fill out the
-// dashboard's Community Update / Featured Store sections with representative UI.
+// Phase 3: replace these static exports with real backend-sourced content
+// (see docs/prd.md §8.6, §8.7, and the "User Profile" section). For this pass
+// they only exist to fill out the dashboard with representative placeholder UI.
 
 export type CommunityUpdateType =
   | "announcement"
@@ -13,6 +13,7 @@ export interface CommunityUpdateItem {
   type: CommunityUpdateType;
   title: string;
   description: string;
+  badge: string;
 }
 
 export const COMMUNITY_UPDATES: CommunityUpdateItem[] = [
@@ -21,24 +22,21 @@ export const COMMUNITY_UPDATES: CommunityUpdateItem[] = [
     type: "announcement",
     title: "Welcome to Kuyland Remastered",
     description: "The new launcher is here with a fresh look and faster updates.",
-  },
-  {
-    id: "event-1",
-    type: "event",
-    title: "Weekend Double XP",
-    description: "Earn double XP on all game modes this weekend.",
+    badge: "New",
   },
   {
     id: "discord-1",
     type: "discord",
-    title: "Join our Discord community",
-    description: "Chat with other players, get support, and stay up to date.",
+    title: "Discord Community",
+    description: "Join our Discord server and connect with thousands of players.",
+    badge: "Online",
   },
   {
-    id: "maintenance-1",
-    type: "maintenance",
-    title: "Scheduled Maintenance",
-    description: "The server will be briefly offline for maintenance on Sunday.",
+    id: "event-1",
+    type: "event",
+    title: "Upcoming Events",
+    description: "Double XP Event this weekend. Join now and get ready.",
+    badge: "Soon",
   },
 ];
 
@@ -49,6 +47,7 @@ export interface FeaturedStoreItem {
   type: FeaturedStoreType;
   title: string;
   description: string;
+  icon: "crown" | "car" | "users" | "coin";
 }
 
 export const FEATURED_STORE_ITEMS: FeaturedStoreItem[] = [
@@ -57,23 +56,44 @@ export const FEATURED_STORE_ITEMS: FeaturedStoreItem[] = [
     type: "vip",
     title: "VIP Membership",
     description: "Unlock exclusive perks and privileges.",
+    icon: "crown",
   },
   {
     id: "vehicle-1",
     type: "vehicle",
-    title: "Exclusive Vehicle Pack",
+    title: "Vehicle Pack",
     description: "Ride in style with limited-edition vehicles.",
+    icon: "car",
   },
   {
     id: "bundle-1",
     type: "bundle",
-    title: "Starter Bundle",
+    title: "Character Bundle",
     description: "Everything you need to get started.",
+    icon: "users",
   },
   {
     id: "coin-1",
     type: "coin",
     title: "Premium Coins",
     description: "Spend on customization and upgrades.",
+    icon: "coin",
   },
 ];
+
+// No player-progression backend exists yet — these are neutral placeholder
+// values (not a real player's data) so the profile card layout can be shown
+// now; wire this up to real data in Phase 3.
+export interface DummyPlayerProgress {
+  level: number;
+  xp: number;
+  xpToNextLevel: number;
+  isVip: boolean;
+}
+
+export const DUMMY_PLAYER_PROGRESS: DummyPlayerProgress = {
+  level: 1,
+  xp: 0,
+  xpToNextLevel: 100,
+  isVip: false,
+};

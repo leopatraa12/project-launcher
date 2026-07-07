@@ -79,7 +79,7 @@ export default {
     "您没有设置 GTA: San Andreas 的游戏路径, 请先设置您的游戏路径.",
   admin_permissions_required_modal_title: "需要管理员权限!",
   admin_permissions_required_modal_description:
-    '您的 GTA: San Andreas 似乎需要管理员权限才能运行. 造成此情况的原因有很多, 比如您把游戏安装在了C盘. 请使用"以管理员身份运行"按钮，或手动以管理员身份重启 open.mp 启动器',
+    '您的 GTA: San Andreas 似乎需要管理员权限才能运行. 造成此情况的原因有很多, 比如您把游戏安装在了C盘. 请使用"以管理员身份运行"按钮，或手动以管理员身份重启 Kuyland Launcher',
   run_as_admin: "以管理员身份运行",
   settings_general_tab_title: "通用设置",
   settings_lang_tab_title: "语言设置",

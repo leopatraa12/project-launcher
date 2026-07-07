@@ -1,6 +1,6 @@
 import { exec } from "child_process";
 
-let cmd = "--best --brute ./src-tauri/target/release/omp-launcher";
+let cmd = "--best --brute ./src-tauri/target/release/kuyland-launcher";
 if (process.platform === "win32") {
   cmd += ".exe";
   cmd = "\"./src-tauri/upx/win.exe\" " + cmd;

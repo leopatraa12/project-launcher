@@ -33,8 +33,11 @@ pub const QUERY_TYPE_PING: char = 'p';
 
 pub const PING_TIMEOUT: u32 = 9999;
 
-pub const LOG_FILE_NAME: &str = "omp-launcher.log";
-pub const DATA_DIR_NAME: &str = "mp.open.launcher";
+pub const LOG_FILE_NAME: &str = "kuyland-launcher.log";
+// Must match tauri.conf.json's `bundle.identifier` — this is also used
+// (independently of Tauri's own appLocalDataDir logic) to locate the shared
+// resource/DLL files for CLI-only direct game launches.
+pub const DATA_DIR_NAME: &str = "com.kuyland.launcher";
 
 pub const GTA_SA_EXECUTABLE: &str = "gta_sa.exe";
 pub const SAMP_DLL: &str = "samp.dll";
@@ -42,7 +45,8 @@ pub const OMP_CLIENT_DLL: &str = "omp-client.dll";
 
 pub const DEEPLINK_SCHEME_OMP: &str = "omp";
 pub const DEEPLINK_SCHEME_SAMP: &str = "samp";
-pub const DEEPLINK_IDENTIFIER: &str = "mp.open.launcher";
+// Must match tauri.conf.json's `bundle.identifier`.
+pub const DEEPLINK_IDENTIFIER: &str = "com.kuyland.launcher";
 
 pub const WINDOW_MIN_WIDTH: u32 = 1000;
 pub const WINDOW_MIN_HEIGHT: u32 = 700;

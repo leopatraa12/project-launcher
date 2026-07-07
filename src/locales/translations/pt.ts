@@ -89,7 +89,7 @@ export default {
   admin_permissions_required_modal_title:
     "Permissões de Administrador necessárias!",
   admin_permissions_required_modal_description:
-    'Parece que o seu jogo GTA: San Andreas requer permissões de Administrador para ser executado. Isso pode ser devido a vários motivos, como ter o jogo instalado na unidade "C". Abra novamente o launcher do open.mp como administrador usando o botão "Executar como administrador" ou manualmente por você mesmo.',
+    'Parece que o seu jogo GTA: San Andreas requer permissões de Administrador para ser executado. Isso pode ser devido a vários motivos, como ter o jogo instalado na unidade "C". Abra novamente o Kuyland Launcher como administrador usando o botão "Executar como administrador" ou manualmente por você mesmo.',
   run_as_admin: "Executar como administrador",
   settings_general_tab_title: "Geral",
   settings_lang_tab_title: "Idiomas",

@@ -86,7 +86,7 @@ export default {
     "Anda belum mengatur direktori GTA: San Andreas, buka pengaturan dan pilih folder game.",
   admin_permissions_required_modal_title: "Diperlukan izin admin!",
   admin_permissions_required_modal_description:
-    'Sepertinya game GTA: San Andreas Anda memerlukan izin administrasi untuk dijalankan. Hal ini dapat disebabkan oleh banyak hal, seperti game Anda terinstal di drive "C". Silakan buka kembali launcher open.mp sebagai administrator baik menggunakan tombol "Run as Admin" atau secara manual oleh Anda sendiri',
+    'Sepertinya game GTA: San Andreas Anda memerlukan izin administrasi untuk dijalankan. Hal ini dapat disebabkan oleh banyak hal, seperti game Anda terinstal di drive "C". Silakan buka kembali Kuyland Launcher sebagai administrator baik menggunakan tombol "Run as Admin" atau secara manual oleh Anda sendiri',
   run_as_admin: "Run as Admin",
   settings_general_tab_title: "Umum",
   settings_lang_tab_title: "Bahasa",

@@ -38,21 +38,26 @@ const Dashboard = memo(() => {
       style={styles.scrollView}
       contentContainerStyle={styles.content}
     >
-      <View onLayout={registerOffset("home")}>
-        <UserProfile />
-        <Hero />
+      <View onLayout={registerOffset("home")} style={styles.topRow}>
+        <View style={styles.heroColumn}>
+          <Hero />
+        </View>
+        <View onLayout={registerOffset("server")} style={styles.sideColumn}>
+          <UserProfile />
+          <ServerInfo />
+        </View>
       </View>
-      <View onLayout={registerOffset("server")} style={styles.section}>
-        <ServerInfo />
-      </View>
-      <View onLayout={registerOffset("community")} style={styles.section}>
-        <CommunityUpdate />
-      </View>
-      <View onLayout={registerOffset("store")} style={styles.section}>
-        <FeaturedStore />
-      </View>
-      <View style={styles.section}>
-        <QuickAccess />
+
+      <View style={styles.bottomRow}>
+        <View onLayout={registerOffset("community")} style={styles.bottomColumn}>
+          <CommunityUpdate />
+        </View>
+        <View onLayout={registerOffset("store")} style={styles.bottomColumn}>
+          <FeaturedStore />
+        </View>
+        <View style={styles.bottomColumn}>
+          <QuickAccess />
+        </View>
       </View>
     </ScrollView>
   );
@@ -66,8 +71,24 @@ const styles = StyleSheet.create({
   content: {
     paddingBottom: sc(20),
   },
-  section: {
-    marginTop: sc(20),
+  topRow: {
+    flexDirection: "row",
+    gap: sc(15),
+  },
+  heroColumn: {
+    flex: 2,
+  },
+  sideColumn: {
+    flex: 1,
+    gap: sc(15),
+  },
+  bottomRow: {
+    flexDirection: "row",
+    marginTop: sc(15),
+    gap: sc(15),
+  },
+  bottomColumn: {
+    flex: 1,
   },
 });
 

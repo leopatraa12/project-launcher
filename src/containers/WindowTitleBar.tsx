@@ -251,8 +251,14 @@ const WindowTitleBar = memo(() => {
     // @ts-ignore
     <View style={containerStyles.main}>
       <View style={containerStyles.leftSection}>
-        <View style={containerStyles.logoContainer}>
-          <Icon image={images.icons.omp} size={sc(22)} />
+        {/* No Kuyland logo asset exists yet — a plain brand-colored mark is used
+            here instead of the open.mp logo; swap for a real logo once provided. */}
+        <View
+          style={[containerStyles.logoContainer, { backgroundColor: theme.primary }]}
+        >
+          <Text semibold size={2} color="#FFFFFF">
+            K
+          </Text>
         </View>
         <Text
           semibold
@@ -260,7 +266,7 @@ const WindowTitleBar = memo(() => {
           color={theme.textPrimary}
           style={containerStyles.titleText}
         >
-          Open Multiplayer
+          Kuyland Launcher
         </Text>
       </View>
       {!IN_GAME && (

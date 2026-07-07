@@ -87,7 +87,7 @@ export default {
     "Bạn chưa đặt đường dẫn GTA: San Andreas, vào cài đặt và tìm kiếm thư mục game.",
   admin_permissions_required_modal_title: "Cần có quyền quản trị viên!",
   admin_permissions_required_modal_description:
-    'Có vẻ như trò chơi GTA: San Andreas của bạn yêu cầu quyền quản trị để chạy. Điều này có thể do nhiều nguyên nhân, chẳng hạn như trò chơi của bạn được cài đặt trong ổ "C". Vui lòng mở lại trình khởi chạy open.mp với tư cách quản trị viên bằng nút "Run as Admin" hoặc tự mình mở theo cách thủ công',
+    'Có vẻ như trò chơi GTA: San Andreas của bạn yêu cầu quyền quản trị để chạy. Điều này có thể do nhiều nguyên nhân, chẳng hạn như trò chơi của bạn được cài đặt trong ổ "C". Vui lòng mở lại Kuyland Launcher với tư cách quản trị viên bằng nút "Run as Admin" hoặc tự mình mở theo cách thủ công',
   run_as_admin: "Chạy với tư cách quản trị viên",
   settings_general_tab_title: "Chung",
   settings_lang_tab_title: "Ngôn ngữ",

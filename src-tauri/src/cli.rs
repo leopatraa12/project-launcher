@@ -58,7 +58,7 @@ impl CliArgs {
     pub fn print_help_and_exit(program_name: &str) -> ! {
         // Using println! here is appropriate for CLI help output
         println!(
-            "Open Multiplayer Launcher
+            "Kuyland Launcher
 
 Usage: {} [OPTIONS]
 

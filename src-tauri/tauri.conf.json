@@ -7,7 +7,7 @@
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "omp-launcher",
+    "productName": "kuyland-launcher",
     "version": "1.7.0"
   },
   "tauri": {
@@ -44,7 +44,7 @@
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "mp.open.launcher",
+      "identifier": "com.kuyland.launcher",
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",
@@ -79,12 +79,12 @@
         "label": "main",
         "fullscreen": false,
         "resizable": true,
-        "title": "Open Multiplayer Launcher",
+        "title": "Kuyland Launcher",
         "width": 1000,
         "height": 700,
         "decorations": false,
         "transparent": true,
-        "userAgent": "omp-launcher",
+        "userAgent": "kuyland-launcher",
         "center": true
       }
     ],

@@ -83,7 +83,7 @@ export default {
     "You didn't set GTA: San Andreas path, go to settings and search for game folder.",
   admin_permissions_required_modal_title: "Admin permissions required!",
   admin_permissions_required_modal_description:
-    'It seems like your GTA: San Andreas game requires administration permissions to run. This can be due to many causes, like having your game installed in "C" drive. Please re-open open.mp launcher as administrator either using "Run as Admin" button or manually by yourself',
+    'It seems like your GTA: San Andreas game requires administration permissions to run. This can be due to many causes, like having your game installed in "C" drive. Please re-open Kuyland Launcher as administrator either using "Run as Admin" button or manually by yourself',
   run_as_admin: "Run as Admin",
   settings_general_tab_title: "General",
   settings_lang_tab_title: "Languages",
@@ -135,37 +135,38 @@ export default {
   hero_play_button: "PLAY",
   hero_connect_button: "CONNECT",
 
+  // Dashboard: user profile
+  notifications: "Notifications",
+  profile_vip_badge: "VIP",
+  profile_level: "Level {{level}}",
+  profile_xp_progress: "{{xp}} / {{xpToNextLevel}} XP",
+
   // Dashboard: server information
   server_info_title: "Server Information",
   status_online: "Online",
   status_offline: "Offline",
   status_maintenance: "Maintenance",
   server_info_players_online: "Players Online",
-  server_info_max_players: "Max Players",
   server_info_ping: "Ping",
   server_info_version: "Version",
-  server_info_voice_status: "Voice Status",
+  server_info_voice_status: "Voice Chat",
   server_info_voice_status_unavailable: "N/A",
   server_info_live_details_toggle: "Live Details",
 
   // Dashboard: community update
-  community_update_title: "Community Update",
-  community_type_announcement: "Announcement",
-  community_type_event: "Event",
-  community_type_discord: "Discord",
-  community_type_maintenance: "Maintenance",
+  community_update_title: "Community Updates",
 
   // Dashboard: featured store
-  featured_store_title: "Featured Store",
-  store_type_vip: "VIP",
-  store_type_vehicle: "Vehicle",
-  store_type_bundle: "Bundle",
-  store_type_coin: "Premium Coin",
+  featured_store_title: "Featured Store Items",
 
   // Dashboard: quick access
   quick_access_title: "Quick Access",
   quick_access_rulebook: "Rulebook",
+  quick_access_rulebook_subtitle: "Server rules and policies",
   quick_access_support: "Support",
+  quick_access_support_subtitle: "Get help from our team",
   quick_access_statistics: "Statistics",
+  quick_access_statistics_subtitle: "Server and player stats",
   quick_access_changelog: "Changelog",
+  quick_access_changelog_subtitle: "Latest updates and fixes",
 };

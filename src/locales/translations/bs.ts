@@ -86,7 +86,7 @@ export default {
   admin_permissions_required_modal_title:
     "Administratorska odobrenja potrebna!",
   admin_permissions_required_modal_description:
-    'Čini se da vaša GTA: San Andreas igra zahtijeva administratorsko odobrenje za pokretanje. To može biti zbog mnogih uzroka, kao što je instaliranje vaše igre na "C" drive. Molimo da ponovo otvorite open.mp launcher kao administrator pomoću dugmeta "Pokreni kao administrator" ili ručno.',
+    'Čini se da vaša GTA: San Andreas igra zahtijeva administratorsko odobrenje za pokretanje. To može biti zbog mnogih uzroka, kao što je instaliranje vaše igre na "C" drive. Molimo da ponovo otvorite Kuyland Launcher kao administrator pomoću dugmeta "Pokreni kao administrator" ili ručno.',
   run_as_admin: "Pokreni kao Admin",
   settings_general_tab_title: "Generalno",
   settings_lang_tab_title: "Jezici",

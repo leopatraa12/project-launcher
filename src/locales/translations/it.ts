@@ -89,7 +89,7 @@ export default {
   admin_permissions_required_modal_title:
     "Privilegi da amministratore necessari!",
   admin_permissions_required_modal_description:
-    'Sembra che il tuo GTA: San Andreas abbia bisogno dei privilegi di amministratore per poter funzionare. Ciò può verificarsi per diversi motivi, come aver installato il gioco nel disco "C". Apri nuovamente il launcher di open.mp come amministratore tramite il pulsante "Esegui come amministratore" oppure fallo manualmente.',
+    'Sembra che il tuo GTA: San Andreas abbia bisogno dei privilegi di amministratore per poter funzionare. Ciò può verificarsi per diversi motivi, come aver installato il gioco nel disco "C". Apri nuovamente il Kuyland Launcher come amministratore tramite il pulsante "Esegui come amministratore" oppure fallo manualmente.',
   run_as_admin: "Esegui come amministratore",
   settings_general_tab_title: "Generale",
   settings_lang_tab_title: "Lingua",
