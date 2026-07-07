@@ -172,7 +172,10 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    zIndex: 62,
+    // Must stay below MessageBox's StaticModal (zIndex 61, see components/StaticModal.tsx)
+    // so the Retry/Cancel/admin-required dialog can still show on top of this overlay
+    // when the asset-update flow fails.
+    zIndex: 50,
     overflow: "hidden",
     borderRadius: sc(10),
   },
