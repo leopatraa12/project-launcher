@@ -497,14 +497,10 @@ const LoadingScreen = ({ onEnd }: LoadingScreenProps) => {
             <span></span>
             <span></span>
           </div>
-          {/* logo-dark-trans.svg is still open.mp's own mark (no Kuyland Remastered
-              logo asset exists yet) — tinted to brand green so it at least doesn't
-              show open.mp's purple; swap for a real logo once one is provided. */}
           <Icon
             svg
             image={images.logoDark}
             size={sc(120)}
-            color={theme.primary}
             // @ts-ignore
             style={styles.logo}
           />

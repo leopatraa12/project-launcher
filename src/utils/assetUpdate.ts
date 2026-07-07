@@ -56,18 +56,49 @@ const fetchManifest = async (): Promise<Manifest> => {
   return json as Manifest;
 };
 
-const diffPackages = (
-  manifest: Manifest,
+const getPackageInstallPath = async (pkg: ManifestPackage, gtasaPath: string) =>
+  path.join(
+    gtasaPath,
+    ...MODLOADER_KUYLAND_SEGMENTS,
+    ...(pkg.installDirectory ? [pkg.installDirectory] : [])
+  );
+
+const isPackageInstalled = async (
+  pkg: ManifestPackage,
+  gtasaPath: string,
   installed: InstalledPackagesState
-): ManifestPackage[] =>
-  manifest.packages.filter((pkg) => {
-    const local = installed[pkg.name];
-    return (
-      !local ||
-      local.version !== pkg.version ||
-      local.sha256.toLowerCase() !== pkg.sha256.toLowerCase()
-    );
-  });
+): Promise<boolean> => {
+  const local = installed[pkg.name];
+  if (
+    !local ||
+    local.version !== pkg.version ||
+    local.sha256.toLowerCase() !== pkg.sha256.toLowerCase()
+  ) {
+    return false;
+  }
+
+  // installed.json alone isn't proof the files are still there (deleted
+  // manually, wiped by antivirus, etc.) — check the actual install folder too.
+  const installPath = await getPackageInstallPath(pkg, gtasaPath);
+  if (!(await fs.exists(installPath))) return false;
+
+  const entries = await fs.readDir(installPath);
+  return entries.length > 0;
+};
+
+const diffPackages = async (
+  manifest: Manifest,
+  installed: InstalledPackagesState,
+  gtasaPath: string
+): Promise<ManifestPackage[]> => {
+  const checks = await Promise.all(
+    manifest.packages.map(async (pkg) => ({
+      pkg,
+      installed: await isPackageInstalled(pkg, gtasaPath, installed),
+    }))
+  );
+  return checks.filter((check) => !check.installed).map((check) => check.pkg);
+};
 
 const downloadAndInstallPackage = async (
   pkg: ManifestPackage,
@@ -119,12 +150,7 @@ const downloadAndInstallPackage = async (
   }
 
   setStage("extracting");
-  const installSegments = [
-    gtasaPath,
-    ...MODLOADER_KUYLAND_SEGMENTS,
-    ...(pkg.installDirectory ? [pkg.installDirectory] : []),
-  ];
-  const outputPath = await path.join(...installSegments);
+  const outputPath = await getPackageInstallPath(pkg, gtasaPath);
 
   await invoke("extract_zip", { path: zipPath, outputPath });
   await fs.removeFile(zipPath).catch(() => {});
@@ -211,7 +237,7 @@ export const ensureAssetsUpToDate = async (
       setStage("checking_manifest");
       const manifest = await fetchManifest();
       const installed = await readInstalledState();
-      const queue = diffPackages(manifest, installed);
+      const queue = await diffPackages(manifest, installed, gtasaPath);
 
       for (let i = 0; i < queue.length; i++) {
         const pkg = queue[i];

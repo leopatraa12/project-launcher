@@ -104,12 +104,7 @@ const AssetUpdateOverlay = memo(() => {
         </>
       ) : (
         <View style={styles.content}>
-          <Icon
-            svg
-            image={images.logoDark}
-            size={sc(80)}
-            color={theme.primary}
-          />
+          <Icon svg image={images.logoDark} size={sc(80)} />
           <View style={styles.spacer} />
           {isDownloadStage && (
             <>
