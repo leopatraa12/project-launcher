@@ -1,10 +1,10 @@
 import { t } from "i18next";
 import { useCallback, useMemo } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import Icon from "../../components/Icon";
 import Text from "../../components/Text";
 import { images } from "../../constants/images";
-import { HERO_BACKGROUND_GRADIENT } from "../../constants/brand";
+import { HERO_OVERLAY_GRADIENT } from "../../constants/brand";
 import { SERVER_DESCRIPTION, SERVER_NAME } from "../../constants/server";
 import { useJoinServerPrompt } from "../../states/joinServerPrompt";
 import { useServers } from "../../states/servers";
@@ -49,8 +49,13 @@ const Hero = () => {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.itemBackgroundColor }]}>
+      <Image
+        source={{ uri: images.heroBanner }}
+        style={styles.background}
+        resizeMode="cover"
+      />
       {/* @ts-ignore */}
-      <View style={[styles.background, { backgroundImage: HERO_BACKGROUND_GRADIENT }]} />
+      <View style={[styles.background, { backgroundImage: HERO_OVERLAY_GRADIENT }]} />
       <View style={styles.content}>
         <View style={styles.titleBlock}>
           <Text semibold size={4} color={theme.textPrimary} style={styles.titleLine}>
