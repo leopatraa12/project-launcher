@@ -32,7 +32,10 @@ tauri-plugin-upload = { git = "https://github.com/tauri-apps/plugins-workspace",
 sevenz-rust = "0.6.1"
 md5 = "0.7.0"
 sha2 = "0.10"
-zip = "2"
+# default-features pulls in AES-encrypted-zip support (pbkdf2/hmac/zeroize), whose newer
+# releases require the unstabilized `edition2024` Cargo feature — unsupported by the CI's
+# pinned nightly-2024-01-01 toolchain. We only need plain deflate zip extraction.
+zip = { version = "2", default-features = false, features = ["deflate"] }
 actix-web = "4.8.0"
 actix-rt = "2.10.0"
 actix-cors = "0.7.0"
