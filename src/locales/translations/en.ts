@@ -169,4 +169,19 @@ export default {
   quick_access_statistics_subtitle: "Server and player stats",
   quick_access_changelog: "Changelog",
   quick_access_changelog_subtitle: "Latest updates and fixes",
+
+  // Asset Update System
+  retry: "Retry",
+  asset_update_downloading_title: "Downloading Asset",
+  asset_update_checking_manifest: "Checking for updates...",
+  asset_update_verifying: "Verifying...",
+  asset_update_extracting: "Installing...",
+  asset_update_remaining_time: "Remaining {{time}}",
+  asset_update_loading_title: "Loading...",
+  asset_update_tip_1: "Tip: You can invite friends from the Community tab.",
+  asset_update_tip_2: "Tip: Check Settings for more options.",
+  asset_update_tip_3: "Tip: Join our Discord for the latest news.",
+  asset_update_failed_title: "Update Failed",
+  asset_update_failed_description:
+    "Failed to check for or download game assets. Please check your internet connection and try again.",
 };

@@ -1,6 +1,7 @@
 export const images = {
   logoDark: "logo-dark-trans.svg",
   heroBanner: "images/hero-banner.jpg",
+  loadingBackground: "images/loading-background.jpg",
   icons: {
     settings: "icons/settings.svg",
     info: "icons/info.png",

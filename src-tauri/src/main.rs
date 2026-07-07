@@ -190,6 +190,8 @@ async fn run_tauri_app() -> Result<()> {
             commands::get_checksum_of_files,
             commands::extract_7z,
             commands::copy_files_to_gtasa,
+            commands::get_sha256_checksum,
+            commands::extract_zip,
             query::query_server,
             ipc::send_message_to_game
         ])

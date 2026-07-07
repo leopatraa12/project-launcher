@@ -32,6 +32,9 @@ import { sc } from "./utils/sizeScaler";
 
 // Lazy load heavy components for better initial load time
 const Dashboard = lazy(() => import("./containers/Dashboard"));
+const AssetUpdateOverlay = lazy(
+  () => import("./containers/AssetUpdateOverlay")
+);
 const ExternalServerHandler = lazy(
   () => import("./containers/ExternalServerHandler")
 );
@@ -218,6 +221,7 @@ const App = memo(() => {
           <ExternalServerHandler />
           <Notification />
           <MessageBox />
+          <AssetUpdateOverlay />
         </View>
       </View>
     </View>

@@ -2,8 +2,10 @@ use crate::{errors::LauncherError, helpers, injector, samp};
 use log::{error, info, warn};
 use md5::compute;
 use sevenz_rust::decompress_file;
+use sha2::{Digest, Sha256};
 use std::fs::File;
 use std::io::Read;
+use zip::ZipArchive;
 
 #[tauri::command]
 pub async fn inject(
@@ -123,6 +125,45 @@ pub fn get_checksum_of_files(list: Vec<String>) -> std::result::Result<Vec<Strin
 pub fn extract_7z(path: String, output_path: String) -> std::result::Result<(), String> {
     decompress_file(&path, &output_path)
         .map_err(|e| format!("Failed to extract archive '{}': {}", path, e))
+}
+
+#[tauri::command]
+pub fn get_sha256_checksum(path: String) -> std::result::Result<String, String> {
+    let mut f = File::open(&path).map_err(|e| format!("Failed to open file '{}': {}", path, e))?;
+
+    let mut hasher = Sha256::new();
+    std::io::copy(&mut f, &mut hasher)
+        .map_err(|e| format!("Failed to read file '{}': {}", path, e))?;
+
+    Ok(format!("{:x}", hasher.finalize()))
+}
+
+#[tauri::command]
+pub fn extract_zip(path: String, output_path: String) -> std::result::Result<(), String> {
+    let file =
+        File::open(&path).map_err(|e| format!("Failed to open archive '{}': {}", path, e))?;
+    let mut archive = ZipArchive::new(file)
+        .map_err(|e| format!("Failed to read zip archive '{}': {}", path, e))?;
+
+    std::fs::create_dir_all(&output_path).map_err(|e| {
+        log::warn!("{}", e);
+        match LauncherError::from(e) {
+            LauncherError::AccessDenied(_) => "need_admin".to_string(),
+            other => other.to_string(),
+        }
+    })?;
+
+    archive.extract(&output_path).map_err(|e| {
+        if let zip::result::ZipError::Io(io_err) = &e {
+            log::warn!("{}", io_err);
+            if matches!(io_err.raw_os_error(), Some(crate::constants::ERROR_ACCESS_DENIED))
+                || matches!(io_err.raw_os_error(), Some(crate::constants::ERROR_ELEVATION_REQUIRED))
+            {
+                return "need_admin".to_string();
+            }
+        }
+        format!("Failed to extract archive '{}': {}", path, e)
+    })
 }
 
 #[tauri::command]

@@ -13,6 +13,7 @@ import { useServers } from "../states/servers";
 import { useSettings } from "../states/settings";
 import { useSettingsModal } from "../states/settingsModal";
 import { getIpAddress } from "../utils/helpers";
+import { ensureAssetsUpToDate } from "./assetUpdate";
 import { Log } from "./logger";
 import { sc } from "./sizeScaler";
 import { Server } from "./types";
@@ -193,6 +194,9 @@ export const startGame = async (
   }
 
   if (!dirValidity) return;
+
+  const assetUpdateResult = await ensureAssetsUpToDate(gtasaPath);
+  if (assetUpdateResult === "cancelled") return;
 
   // Custom exe doesn't exist
   if ((await fs.exists(await path.join(gtasaPath, customGameExe))) === false) {
