@@ -1,13 +1,9 @@
 import { t } from "i18next";
-import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TextInput, View } from "react-native";
 import Text from "../../../components/Text";
 import { IN_GAME } from "../../../constants/app";
 import { useSettings } from "../../../states/settings";
 import { useTheme } from "../../../states/theme";
-import {
-  exportFavoriteListFile,
-  importFavoriteListFile,
-} from "../../../utils/game";
 import { sc } from "../../../utils/sizeScaler";
 
 const Advanced = () => {
@@ -43,43 +39,6 @@ const Advanced = () => {
         </View>
       )}
       <View style={{ flex: 1 }} />
-      <View
-        style={{
-          width: "100%",
-          marginTop: sc(10),
-        }}
-      >
-        <TouchableOpacity
-          style={[
-            styles.importButton,
-            {
-              backgroundColor: `${theme.primary}BB`,
-              borderColor: theme.primary,
-            },
-          ]}
-          onPress={() => exportFavoriteListFile()}
-        >
-          <Text semibold color={"#FFFFFF"} size={2}>
-            {t("settings_export_favorite_list_file")}
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[
-            styles.importButton,
-            {
-              backgroundColor: `${theme.primary}BB`,
-              borderColor: theme.primary,
-            },
-          ]}
-          onPress={() => importFavoriteListFile()}
-        >
-          <Text semibold color={"#FFFFFF"} size={2}>
-            {t("settings_import_favorite_list_file")}
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.pathInputContainer}></View>
     </View>
   );
 };
@@ -105,15 +64,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 8,
     marginLeft: 5,
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 2,
-  },
-  importButton: {
-    marginTop: 10,
-    height: 30,
-    paddingHorizontal: 10,
-    borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 2,

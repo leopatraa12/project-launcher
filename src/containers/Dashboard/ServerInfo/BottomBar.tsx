@@ -3,14 +3,14 @@ import { shell } from "@tauri-apps/api";
 import { t } from "i18next";
 import { useMemo } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import Icon from "../../components/Icon";
-import Text from "../../components/Text";
-import { images } from "../../constants/images";
-import { usePersistentServers, useServers } from "../../states/servers";
-import { useTheme } from "../../states/theme";
-import { sc } from "../../utils/sizeScaler";
-import { validateWebUrl } from "../../utils/validation";
-import Chart from "../PingChart";
+import Icon from "../../../components/Icon";
+import Text from "../../../components/Text";
+import { images } from "../../../constants/images";
+import { useServers } from "../../../states/servers";
+import { useTheme } from "../../../states/theme";
+import { sc } from "../../../utils/sizeScaler";
+import { validateWebUrl } from "../../../utils/validation";
+import Chart from "../../PingChart";
 
 interface PropInfoProps {
   glow?: boolean;
@@ -77,16 +77,7 @@ const PropInfo = ({
 
 const BottomBar = () => {
   const { selected: server } = useServers();
-  const { favorites, addToFavorites, removeFromFavorites } =
-    usePersistentServers();
   const { theme } = useTheme();
-
-  const favorited = useMemo(() => {
-    const find = favorites.find(
-      (fav) => server && fav.ip === server.ip && fav.port == server.port
-    );
-    return find !== undefined;
-  }, [server, favorites]);
 
   const discordInvite = useMemo(() => {
     if (server && server.omp && server.omp.discordInvite) {
@@ -162,26 +153,6 @@ const BottomBar = () => {
               text={server.gameMode}
             />
           )}
-          <TouchableOpacity
-            style={[styles.actionButton, { backgroundColor: theme.primary }]}
-            onPress={() => {
-              if (favorited) {
-                removeFromFavorites(server);
-              } else {
-                addToFavorites(server);
-              }
-            }}
-          >
-            <Icon
-              svg
-              image={favorited ? images.icons.favRemove : images.icons.favAdd}
-              size={sc(16)}
-              color="#FF0000"
-            />
-            <Text semibold color="#FFFFFF" style={styles.actionButtonText}>
-              {favorited ? t("remove_from_favorites") : t("add_to_favorites")}
-            </Text>
-          </TouchableOpacity>
         </View>
       </View>
       <Chart containerStyle={styles.chartContainer} />

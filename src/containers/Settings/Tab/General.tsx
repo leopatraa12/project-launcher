@@ -4,14 +4,12 @@ import { t } from "i18next";
 import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import Text from "../../../components/Text";
 import { useAppState } from "../../../states/app";
-import { usePersistentServers } from "../../../states/servers";
 import { useSettings } from "../../../states/settings";
 import { useTheme } from "../../../states/theme";
 import { checkDirectoryValidity } from "../../../utils/game";
 import { Log } from "../../../utils/logger";
 import { sc } from "../../../utils/sizeScaler";
 import { stateStorage } from "../../../utils/stateStorage";
-import { Server } from "../../../utils/types";
 
 const General = () => {
   const { hostOS } = useAppState();
@@ -50,62 +48,6 @@ const General = () => {
     } catch (e) {
       Log.debug(e);
     }
-  };
-
-  const importFavListFromSAMP = async () => {
-    await invoke("get_samp_favorite_list").then((a) => {
-      const userData: {
-        file_id: string;
-        file_version: number;
-        server_count: number;
-        favorite_servers: {
-          ip: string;
-          port: number;
-          name: string;
-          password: string;
-          rcon: string;
-        }[];
-      } = JSON.parse(a as string);
-
-      if (userData.file_id === "SAMP") {
-        const { addToFavorites } = usePersistentServers.getState();
-        userData.favorite_servers.forEach((server) => {
-          const serverInfo: Server = {
-            ip: "",
-            port: 0,
-            hostname: "No information",
-            playerCount: 0,
-            maxPlayers: 0,
-            gameMode: "-",
-            language: "-",
-            hasPassword: false,
-            version: "-",
-            usingOmp: false,
-            partner: false,
-            ping: 0,
-            password: "",
-            players: [],
-            rules: {} as Server["rules"],
-          };
-
-          if (server.ip.length) {
-            serverInfo.ip = server.ip;
-            serverInfo.port = server.port;
-            if (server.name.includes("(Retrieving info...)")) {
-              serverInfo.hostname += ` (${serverInfo.ip}:${serverInfo.port})`;
-            } else {
-              serverInfo.hostname = server.name;
-            }
-
-            if (server.password.length) {
-              serverInfo.password = server.password;
-            }
-
-            addToFavorites(serverInfo);
-          }
-        });
-      }
-    });
   };
 
   return (
@@ -159,19 +101,6 @@ const General = () => {
       >
         <Text semibold color={"#FFFFFF"} size={2}>
           {t("settings_import_nickname_gta_path_from_samp")}
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[
-          styles.importButton,
-          {
-            backgroundColor: `${theme.primary}BB`,
-          },
-        ]}
-        onPress={() => importFavListFromSAMP()}
-      >
-        <Text semibold color={"#FFFFFF"} size={2}>
-          {t("settings_import_samp_favorite_list")}
         </Text>
       </TouchableOpacity>
       <TouchableOpacity

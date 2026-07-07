@@ -11,19 +11,6 @@ export const RULE_TYPES = [
 
 export type Rule = (typeof RULE_TYPES)[number];
 
-export const LIST_TYPES = [
-  "favorites",
-  "internet",
-  "partners",
-  "recentlyjoined",
-] as const;
-
-export type ListType = (typeof LIST_TYPES)[number];
-
-export const SORT_TYPES = ["none", "ascending", "descending"] as const;
-
-export type SortType = (typeof SORT_TYPES)[number];
-
 export const SAMP_DLL_VERSIONS = [
   "037R1_samp.dll",
   "037R2_samp.dll",
@@ -80,38 +67,6 @@ export interface Server {
   rules: ServerRules;
 }
 
-// Search and filter types
-export interface SearchData {
-  query: string;
-  ompOnly: boolean;
-  nonEmpty: boolean;
-  unpassworded: boolean;
-  sortPlayer: SortType;
-  sortPing: SortType;
-  sortName: SortType;
-  sortMode: SortType;
-  languages: string[];
-}
-
-// API response types
-export interface APIResponseServerCore {
-  gm: string;
-  hn: string;
-  ip: string;
-  la: string;
-  pa: boolean;
-  pc: number;
-  pm: number;
-  vn: string;
-  omp: boolean;
-  pr: boolean;
-}
-
-export interface APIResponseServer {
-  core: APIResponseServerCore;
-  ru: ServerRules;
-}
-
 // Settings types
 export interface PerServerSettings {
   ipPort: string;
@@ -128,14 +83,6 @@ export interface ServerIdentifier {
 }
 
 // Type guards
-export const isValidSortType = (value: string): value is SortType => {
-  return SORT_TYPES.includes(value as SortType);
-};
-
-export const isValidListType = (value: string): value is ListType => {
-  return LIST_TYPES.includes(value as ListType);
-};
-
 export const isValidSAMPVersion = (value: string): value is SAMPDLLVersions => {
   return SAMP_DLL_VERSIONS.includes(value as SAMPDLLVersions);
 };

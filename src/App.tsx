@@ -16,36 +16,28 @@ import {
 } from "react";
 import { StyleSheet, View } from "react-native";
 import { DEBUG_MODE, IN_GAME, IN_GAME_PROCESS_ID } from "./constants/app";
+import { createInitialKuylandServer } from "./constants/server";
 import LoadingScreen from "./containers/LoadingScreen";
 import WindowTitleBar from "./containers/WindowTitleBar";
+import Sidebar from "./containers/Sidebar";
+import { useQuery } from "./hooks/query";
 import { changeLanguage } from "./locales";
 import { useGenericPersistentState } from "./states/genericStates";
-import { usePersistentServers } from "./states/servers";
+import { useServers } from "./states/servers";
 import { useTheme } from "./states/theme";
 import { throttle } from "./utils/debounce";
-import {
-  checkIfProcessAlive,
-  fetchServers,
-  fetchUpdateInfo,
-  generateLanguageFilters,
-} from "./utils/helpers";
+import { checkIfProcessAlive, fetchUpdateInfo } from "./utils/helpers";
 import PerformanceMonitor from "./utils/performance";
-import { PING_TIMEOUT_VALUE } from "./utils/query";
 import { sc } from "./utils/sizeScaler";
 
 // Lazy load heavy components for better initial load time
-const MainView = lazy(() => import("./containers/MainBody"));
-const NavBar = lazy(() => import("./containers/NavBar"));
-const AddThirdPartyServerModal = lazy(
-  () => import("./containers/AddThirdPartyServer")
-);
+const Dashboard = lazy(() => import("./containers/Dashboard"));
 const ExternalServerHandler = lazy(
   () => import("./containers/ExternalServerHandler")
 );
 const JoinServerPrompt = lazy(() => import("./containers/JoinServerPrompt"));
 const MessageBox = lazy(() => import("./containers/MessageBox"));
 const Notification = lazy(() => import("./containers/Notification"));
-const ContextMenu = lazy(() => import("./containers/ServerContextMenu"));
 const SettingsModal = lazy(() => import("./containers/Settings"));
 
 const App = memo(() => {
@@ -53,6 +45,8 @@ const App = memo(() => {
   const [maximized, setMaximized] = useState(false);
   const { theme } = useTheme();
   const { language } = useGenericPersistentState();
+  const { setSelected } = useServers();
+  const { startQuery } = useQuery();
   const windowSize = useRef<PhysicalSize>();
   const mainWindowSize = useRef<LogicalSize>();
   const processCheckInterval = useRef<NodeJS.Timeout>();
@@ -96,31 +90,17 @@ const App = memo(() => {
         appWindow.center(),
       ]);
 
-      // Reset favorite server list outdated cached data
-      const { favorites, updateInFavoritesList } =
-        usePersistentServers.getState();
-      if (Array.isArray(favorites) && favorites.length > 0) {
-        favorites.forEach((server) => {
-          server.ping = PING_TIMEOUT_VALUE;
-          server.playerCount = 0;
-          server.players = [];
-          server.rules = {} as typeof server.rules;
-          server.hasPassword = false;
-          updateInFavoritesList(server);
-        });
-      }
+      // Seed the one hardcoded server and start its live-query polling —
+      // this single call is the app's entire live-query lifecycle.
+      const seed = createInitialKuylandServer();
+      setSelected(seed);
+      startQuery(seed);
 
-      // Run independent operations in parallel
-      await Promise.all([
-        // Start these operations without waiting
-        fetchServers(),
-        fetchUpdateInfo(),
-        generateLanguageFilters(),
-      ]);
+      await fetchUpdateInfo();
     } finally {
       endTimer();
     }
-  }, []);
+  }, [setSelected, startQuery]);
 
   useEffect(() => {
     changeLanguage(language as any);
@@ -231,12 +211,10 @@ const App = memo(() => {
       <View style={appViewStyle}>
         <WindowTitleBar />
         <View style={styles.appBody}>
-          <NavBar />
-          <MainView />
-          <ContextMenu />
+          <Sidebar />
+          <Dashboard />
           <JoinServerPrompt />
           <SettingsModal />
-          <AddThirdPartyServerModal />
           <ExternalServerHandler />
           <Notification />
           <MessageBox />
@@ -270,6 +248,7 @@ const styles = StyleSheet.create({
   appBody: {
     flex: 1,
     width: "100%",
+    flexDirection: "row",
     paddingHorizontal: sc(15),
     paddingBottom: sc(15),
   },

@@ -31,13 +31,8 @@ import { SAMPDLLVersions } from "../../utils/types";
 
 const JoinServerPrompt = () => {
   const { visible, server, showPrompt } = useJoinServerPrompt();
-  const {
-    getServerSettings,
-    setServerSettings,
-    updateInFavoritesList,
-    updateInRecentlyJoinedList,
-    perServerSettings,
-  } = usePersistentServers();
+  const { getServerSettings, setServerSettings, perServerSettings } =
+    usePersistentServers();
   const { updateServer } = useServers();
   const { height, width } = useWindowDimensions();
   const { theme, themeType } = useTheme();
@@ -199,8 +194,6 @@ const JoinServerPrompt = () => {
         srvCpy.password = password;
 
         updateServer(srvCpy);
-        updateInFavoritesList(srvCpy);
-        updateInRecentlyJoinedList(srvCpy);
       }
 
       startGame(
@@ -211,17 +204,7 @@ const JoinServerPrompt = () => {
       );
       showPrompt(false);
     }
-  }, [
-    server,
-    password,
-    perServerNickname,
-    nickName,
-    gtasaPath,
-    updateServer,
-    updateInFavoritesList,
-    updateInRecentlyJoinedList,
-    showPrompt,
-  ]);
+  }, [server, password, perServerNickname, nickName, gtasaPath, updateServer, showPrompt]);
 
   const handleVersionChange = useCallback(
     async (value: string) => {

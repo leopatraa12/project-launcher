@@ -1,7 +1,8 @@
 import { invoke } from "@tauri-apps/api";
-import { usePersistentServers, useServers } from "../states/servers";
+import { KUYLAND_SERVER, createInitialKuylandServer } from "../constants/server";
+import { useServers } from "../states/servers";
 import { Log } from "./logger";
-import { ListType, Server } from "./types";
+import { Server } from "./types";
 
 export const PING_TIMEOUT_VALUE = 9999;
 const DEFAULT_PING_VALUE = 0;
@@ -74,7 +75,6 @@ const createQueryConfig = (
 
 export const queryServer = (
   server: Server,
-  listType: ListType = "internet",
   queryType: "all" | "basic" = "all",
   pingOnly = false
 ): void => {
@@ -82,7 +82,7 @@ export const queryServer = (
     const { ip, port } = server;
     const config = createQueryConfig(pingOnly ? "ping" : queryType);
 
-    queryServerImpl(ip, port, config, listType);
+    queryServerImpl(ip, port, config);
   } catch (error) {
     Log.debug("[query.ts: queryServer]", error);
   }
@@ -91,8 +91,7 @@ export const queryServer = (
 const queryServerImpl = async (
   ip: string,
   port: number,
-  config: QueryConfig,
-  listType: ListType
+  config: QueryConfig
 ): Promise<void> => {
   try {
     const result: QueryResult = JSON.parse(
@@ -107,7 +106,7 @@ const queryServerImpl = async (
       })
     );
 
-    await processQueryResult(ip, port, result, listType);
+    await processQueryResult(ip, port, result);
   } catch (e) {
     Log.debug("[query.ts: queryServerImpl]", e);
   }
@@ -124,13 +123,12 @@ const parseJsonResponse = <T>(jsonString: string): T | null => {
 const processQueryResult = async (
   ip: string,
   port: number,
-  result: QueryResult,
-  listType: ListType
+  result: QueryResult
 ): Promise<void> => {
   if (result.info) {
     const parsedInfo = parseJsonResponse<ServerInfo>(result.info);
     if (parsedInfo && !parsedInfo.error) {
-      await setServerInfo(ip, port, parsedInfo, listType);
+      await setServerInfo(ip, port, parsedInfo);
     }
   }
 
@@ -141,7 +139,7 @@ const processQueryResult = async (
         !Array.isArray(parsedPlayers) ||
         !parsedPlayers.some((p: any) => p.error)
       ) {
-        await setServerPlayers(ip, port, parsedPlayers, listType);
+        await setServerPlayers(ip, port, parsedPlayers);
       }
     }
   }
@@ -149,27 +147,26 @@ const processQueryResult = async (
   if (result.rules) {
     const parsedRules = parseJsonResponse<any[]>(result.rules);
     if (parsedRules && !parsedRules.some?.((r: any) => r.error)) {
-      await setServerRules(ip, port, parsedRules, listType);
+      await setServerRules(ip, port, parsedRules);
     }
   }
 
   if (result.extra_info) {
     const parsedExtraInfo = parseJsonResponse<OmpExtraInfo>(result.extra_info);
     if (parsedExtraInfo && !parsedExtraInfo.error) {
-      await setServerOmpExtraInfo(ip, port, parsedExtraInfo, listType);
+      await setServerOmpExtraInfo(ip, port, parsedExtraInfo);
     }
   }
 
   if (result.ping != null && typeof result.ping === "number") {
-    await setServerPing(ip, port, result.ping, listType);
+    await setServerPing(ip, port, result.ping);
   }
 };
 
 const setServerInfo = async (
   ip: string,
   port: number,
-  res: ServerInfo,
-  listType: ListType
+  res: ServerInfo
 ): Promise<void> => {
   try {
     const data = {
@@ -181,7 +178,7 @@ const setServerInfo = async (
       language: res.language,
     };
 
-    const server = getServerFromList(ip, port, listType);
+    const server = getServerFromList(ip, port);
     if (server) {
       const updatedServer = { ...server, ...data };
       updateServerEveryWhere(updatedServer);
@@ -194,11 +191,10 @@ const setServerInfo = async (
 const setServerPlayers = async (
   ip: string,
   port: number,
-  res: any[],
-  listType: ListType
+  res: any[]
 ): Promise<void> => {
   try {
-    const server = getServerFromList(ip, port, listType);
+    const server = getServerFromList(ip, port);
     if (server && Array.isArray(res)) {
       const updatedServer = { ...server, players: [...res] };
       updateServerEveryWhere(updatedServer);
@@ -218,11 +214,10 @@ const determineIfOmpServer = (rules: Server["rules"]): boolean => {
 const setServerRules = async (
   ip: string,
   port: number,
-  res: [string, string][],
-  listType: ListType
+  res: [string, string][]
 ): Promise<void> => {
   try {
-    const server = getServerFromList(ip, port, listType);
+    const server = getServerFromList(ip, port);
     if (server) {
       const rules: Server["rules"] = {} as Server["rules"];
 
@@ -249,11 +244,10 @@ const createOmpExtraInfo = (res: OmpExtraInfo) => ({
 const setServerOmpExtraInfo = async (
   ip: string,
   port: number,
-  res: OmpExtraInfo,
-  listType: ListType
+  res: OmpExtraInfo
 ): Promise<void> => {
   try {
-    const server = getServerFromList(ip, port, listType);
+    const server = getServerFromList(ip, port);
     if (server && res) {
       const updatedServer = {
         ...server,
@@ -281,11 +275,10 @@ const calculatePing = (newPing: number, currentPing: number): number => {
 const setServerPing = async (
   ip: string,
   port: number,
-  res: number,
-  listType: ListType
+  res: number
 ): Promise<void> => {
   try {
-    const server = getServerFromList(ip, port, listType);
+    const server = getServerFromList(ip, port);
     if (server) {
       const ping = calculatePing(res, server.ping);
       const updatedServer = { ...server, ping };
@@ -296,42 +289,15 @@ const setServerPing = async (
   }
 };
 
-const getListBasedOnType = (listType: ListType): Server[] => {
-  const { servers } = useServers.getState();
-  const { favorites, recentlyJoined } = usePersistentServers.getState();
-
-  switch (listType) {
-    case "internet":
-    case "partners":
-      return servers;
-    case "favorites":
-      return favorites;
-    case "recentlyjoined":
-      return recentlyJoined;
-    default:
-      return servers;
-  }
-};
-
-const getServerFromList = (
-  ip: string,
-  port: number,
-  listType: ListType
-): Server | undefined => {
-  const list = getListBasedOnType(listType);
-  return list.find((server) => server.ip === ip && server.port === port);
+// There is only ever one valid server in this build, so we match query
+// responses against the hardcoded KUYLAND_SERVER address (not the mutable
+// `selected` state) and self-heal to a fresh server object if `selected` was
+// ever cleared (e.g. by startGame() after a successful inject).
+const getServerFromList = (ip: string, port: number): Server | undefined => {
+  if (ip !== KUYLAND_SERVER.ip || port !== KUYLAND_SERVER.port) return undefined;
+  return useServers.getState().selected ?? createInitialKuylandServer();
 };
 
 const updateServerEveryWhere = (server: Server): void => {
-  const { updateServer, selected, setSelected } = useServers.getState();
-  const { updateInFavoritesList, updateInRecentlyJoinedList } =
-    usePersistentServers.getState();
-
-  updateServer(server);
-  updateInFavoritesList(server);
-  updateInRecentlyJoinedList(server);
-
-  if (selected?.ip === server.ip && selected?.port === server.port) {
-    setSelected(server);
-  }
+  useServers.getState().updateServer(server);
 };

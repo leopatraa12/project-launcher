@@ -39,5 +39,11 @@ export const images = {
     ip: "icons/ip.svg",
     mode: "icons/mode.svg",
     discord: "icons/discord.svg",
+    home: "icons/home.svg",
+    server: "icons/server.svg",
+    store: "icons/store.svg",
+    community: "icons/community.svg",
+    website: "icons/website.svg",
+    instagram: "icons/instagram.svg",
   },
 };

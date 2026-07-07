@@ -121,4 +121,51 @@ export default {
     "Unable to find custom game executable!",
   unable_to_find_custom_game_exe_description:
     "The specified custom game executable file could not be found in the GTA: San Andreas directory. Please check it in Settings -> Advance tab.",
+
+  // Dashboard: sidebar
+  nav_home: "Home",
+  nav_server: "Server",
+  nav_store: "Store",
+  nav_community: "Community",
+  footer_discord: "Discord",
+  footer_website: "Website",
+  footer_instagram: "Instagram",
+
+  // Dashboard: hero
+  hero_play_button: "PLAY",
+  hero_connect_button: "CONNECT",
+
+  // Dashboard: server information
+  server_info_title: "Server Information",
+  status_online: "Online",
+  status_offline: "Offline",
+  status_maintenance: "Maintenance",
+  server_info_players_online: "Players Online",
+  server_info_max_players: "Max Players",
+  server_info_ping: "Ping",
+  server_info_version: "Version",
+  server_info_voice_status: "Voice Status",
+  server_info_voice_status_unavailable: "N/A",
+  server_info_live_details_toggle: "Live Details",
+
+  // Dashboard: community update
+  community_update_title: "Community Update",
+  community_type_announcement: "Announcement",
+  community_type_event: "Event",
+  community_type_discord: "Discord",
+  community_type_maintenance: "Maintenance",
+
+  // Dashboard: featured store
+  featured_store_title: "Featured Store",
+  store_type_vip: "VIP",
+  store_type_vehicle: "Vehicle",
+  store_type_bundle: "Bundle",
+  store_type_coin: "Premium Coin",
+
+  // Dashboard: quick access
+  quick_access_title: "Quick Access",
+  quick_access_rulebook: "Rulebook",
+  quick_access_support: "Support",
+  quick_access_statistics: "Statistics",
+  quick_access_changelog: "Changelog",
 };

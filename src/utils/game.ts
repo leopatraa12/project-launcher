@@ -1,6 +1,5 @@
 import { fs, invoke, path, process, shell } from "@tauri-apps/api";
-import { open, save } from "@tauri-apps/api/dialog";
-import { exists, readTextFile, writeTextFile } from "@tauri-apps/api/fs";
+import { exists } from "@tauri-apps/api/fs";
 import { t } from "i18next";
 import {
   IN_GAME,
@@ -10,13 +9,11 @@ import {
 } from "../constants/app";
 import { useJoinServerPrompt } from "../states/joinServerPrompt";
 import { useMessageBox } from "../states/messageModal";
-import { useNotification } from "../states/notification";
-import { usePersistentServers, useServers } from "../states/servers";
+import { useServers } from "../states/servers";
 import { useSettings } from "../states/settings";
 import { useSettingsModal } from "../states/settingsModal";
-import { fetchServers, getIpAddress } from "../utils/helpers";
+import { getIpAddress } from "../utils/helpers";
 import { Log } from "./logger";
-import { PING_TIMEOUT_VALUE } from "./query";
 import { sc } from "./sizeScaler";
 import { Server } from "./types";
 
@@ -66,7 +63,6 @@ export const startGame = async (
   gtasaPath: string,
   password: string
 ) => {
-  const { addToRecentlyJoined } = usePersistentServers.getState();
   const { showMessageBox, hideMessageBox } = useMessageBox.getState();
   const { show: showSettings } = useSettingsModal.getState();
   const { sampVersion, customGameExe } = useSettings.getState();
@@ -230,7 +226,6 @@ export const startGame = async (
     customGameExe,
   })
     .then(() => {
-      addToRecentlyJoined(server);
       setSelected(undefined);
     })
     .catch((e) => {
@@ -296,92 +291,3 @@ export const checkDirectoryValidity = async (
   return true;
 };
 
-export const exportFavoriteListFile = async () => {
-  const { favorites } = usePersistentServers.getState();
-  if (!favorites.length) {
-    showOkModal(t("export_failed_title"), t("export_no_servers_description"));
-    return;
-  }
-
-  try {
-    const exportData = {
-      version: 1,
-      servers: favorites.map(({ ip, port, hostname, password }) => ({
-        ip,
-        port,
-        name: hostname,
-        password: password || "",
-      })),
-    };
-
-    const savePath = await save({
-      filters: [{ name: "JSON", extensions: ["json"] }],
-      defaultPath: "omp_servers.json",
-    });
-
-    if (!savePath) return;
-    await writeTextFile(savePath, JSON.stringify(exportData, null, 2));
-
-    useNotification
-      .getState()
-      .showNotification(
-        t("export_successful_title"),
-        t("export_successful_description")
-      );
-  } catch (error) {
-    Log.debug("Error exporting servers:", error);
-    showOkModal(t("export_failed_title"), t("export_failed_description"));
-  }
-};
-
-export const importFavoriteListFile = async () => {
-  try {
-    const selected = await open({
-      multiple: false,
-      filters: [{ name: "JSON", extensions: ["json"] }],
-    });
-    if (!selected) return;
-
-    const fileContent = await readTextFile(selected as string);
-    const data = JSON.parse(fileContent);
-
-    if (!Array.isArray(data.servers)) {
-      throw new Error("Invalid file format: missing servers array");
-    }
-
-    const { addToFavorites } = usePersistentServers.getState();
-
-    data.servers.forEach((srv: any) => {
-      if (srv.ip && srv.port) {
-        addToFavorites({
-          ip: srv.ip,
-          port: Number(srv.port),
-          hostname: srv.name || `${srv.ip}:${srv.port}`,
-          playerCount: 0,
-          maxPlayers: 0,
-          gameMode: "-",
-          language: "-",
-          hasPassword: !!srv.password,
-          version: "-",
-          usingOmp: false,
-          partner: false,
-          ping: PING_TIMEOUT_VALUE,
-          players: [],
-          password: srv.password || "",
-          rules: {} as Server["rules"],
-        });
-      }
-    });
-
-    fetchServers(true);
-    useNotification
-      .getState()
-      .showNotification(
-        t("import_successful_title"),
-        t("import_successful_description")
-      );
-  } catch (error) {
-    Log.debug("Error importing servers:", error);
-    showOkModal(t("import_failed_title"), t("import_failed_description"));
-  }
-};

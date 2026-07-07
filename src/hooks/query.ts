@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
 import { useServers } from "../states/servers";
 import { queryServer } from "../utils/query";
-import { ListType, Server } from "../utils/types";
+import { Server } from "../utils/types";
 
 const QUERY_INTERVAL_DELAY_MS = 1000;
 const QUERY_TIMES_TO_GET_INFO_THRESHOLD = 5;
@@ -35,11 +35,11 @@ export const useQuery = () => {
     }
   }, [setSelected]);
 
-  const getServerInfo = useCallback((srv: Server, listType: ListType) => {
+  const getServerInfo = useCallback((srv: Server) => {
     const shouldGetFullInfo =
       queryTimesToGetInfo.current !== QUERY_TIMES_TO_GET_INFO_THRESHOLD;
 
-    queryServer(srv, listType, "all", shouldGetFullInfo);
+    queryServer(srv, "all", shouldGetFullInfo);
 
     if (shouldGetFullInfo) {
       queryTimesToGetInfo.current++;
@@ -49,7 +49,7 @@ export const useQuery = () => {
   }, []);
 
   const startQuery = useCallback(
-    (srv: Server, listType: ListType) => {
+    (srv: Server) => {
       // Clear any existing query
       if (queryTimer.current) {
         clearInterval(queryTimer.current);
@@ -58,10 +58,10 @@ export const useQuery = () => {
 
       // Start new query cycle
       queryTimesToGetInfo.current = QUERY_TIMES_TO_GET_INFO_THRESHOLD;
-      getServerInfo(srv, listType);
+      getServerInfo(srv);
 
       queryTimer.current = setInterval(() => {
-        getServerInfo(srv, listType);
+        getServerInfo(srv);
       }, QUERY_INTERVAL_DELAY_MS);
     },
     [getServerInfo]
